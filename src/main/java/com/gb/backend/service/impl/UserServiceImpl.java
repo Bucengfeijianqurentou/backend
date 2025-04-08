@@ -37,11 +37,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     /**
      * 用户登录
-     * 验证用户名和密码是否匹配
+     * 验证用户名、密码和角色是否匹配
      *
      * @param loginDTO 登录参数
      * @return 登录成功的用户信息
-     * @throws BusinessException 当用户名或密码错误时
+     * @throws BusinessException 当用户名或密码错误，或角色不匹配时
      */
     @Override
     public User login(UserLoginDTO loginDTO) {
@@ -51,12 +51,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         // 构建查询条件
         LambdaQueryWrapper<User> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(User::getUsername, loginDTO.getUsername())
-                   .eq(User::getPassword, encryptedPassword);
+                   .eq(User::getPassword, encryptedPassword)
+                   .eq(User::getRole, loginDTO.getRole());
         
         // 查询用户
         User user = this.getOne(queryWrapper);
         if (user == null) {
-            throw new BusinessException(ErrorMessage.USERNAME_PASSWORD_ERROR);
+            throw new BusinessException(ErrorMessage.USERNAME_PASSWORD_ROLE_ERROR);
         }
         return user;
     }

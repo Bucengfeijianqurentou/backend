@@ -5,8 +5,8 @@ package com.gb.backend.common.constant;
  * @since 2024-04-08
  */
 public interface ErrorMessage {
-    /** 用户名或密码错误提示 */
-    String USERNAME_PASSWORD_ERROR = "用户名或密码错误";
+    /** 用户名、密码或角色错误提示 */
+    String USERNAME_PASSWORD_ROLE_ERROR = "用户名、密码或角色错误";
 
     /** 用户名已存在提示 */
     String USERNAME_EXISTS = "用户名已存在";
