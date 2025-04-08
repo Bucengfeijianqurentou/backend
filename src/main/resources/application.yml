@@ -8,10 +8,20 @@ spring:
     username: root
     password: 123456
   
-  # 可选：配置 Jackson 日期格式
+  # Jackson日期格式配置
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
+    # 配置序列化时的默认属性
+    serialization:
+      # 格式化输出
+      indent_output: true
+      # 忽略无法转换的对象
+      fail_on_empty_beans: false
+    # 配置反序列化时的默认属性
+    deserialization:
+      # 允许对象忽略json中不存在的属性
+      fail_on_unknown_properties: false
 
 # MyBatis Plus 配置
 mybatis-plus:
@@ -21,16 +31,13 @@ mybatis-plus:
   global-config:
     # 数据库相关配置
     db-config:
-      # 主键类型 AUTO:"数据库ID自增", INPUT:"用户输入ID", ID_WORKER:"全局唯一ID (数字类型唯一ID)", UUID:"全局唯一ID UUID"
+      # 主键类型 AUTO:"数据库ID自增"
       id-type: AUTO
-      # 字段策略 IGNORED:"忽略判断", NOT_NULL:"非 NULL 判断"), NOT_EMPTY:"非空判断"
+      # 字段策略 NOT_NULL:"非 NULL 判断"
       field-strategy: NOT_NULL
       # 驼峰下划线转换
       table-underline: true
-      # 逻辑删除配置
-      logic-delete-field: deleted  # 逻辑删除全局属性名
-      logic-delete-value: 1 # 逻辑已删除值(默认为 1)
-      logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
+
   configuration:
     map-underscore-to-camel-case: true
     cache-enabled: false
