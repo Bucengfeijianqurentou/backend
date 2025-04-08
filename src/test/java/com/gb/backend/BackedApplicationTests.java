@@ -1,4 +1,4 @@
-package com.gb.backed;
+package com.gb.backend;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
