@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gb.backend.mapper.InspectionMapper">
+    
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gb.backend.entity.Inspection">
+        <id column="id" property="id"/>
+        <result column="inspector_id" property="inspectorId"/>
+        <result column="inspection_time" property="inspectionTime"/>
+        <result column="content" property="content"/>
+        <result column="result" property="result"/>
+        <result column="issues" property="issues"/>
+        <result column="issues" property="suggestions"/>
+        <result column="batch_number" property="batchNumber"/>
+        <result column="menu_id" property="menuId"/>
+    </resultMap>
+
+</mapper> 

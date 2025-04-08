@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gb.backend.mapper.PurchaseMapper">
+    
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.gb.backend.entity.Purchase">
+        <id column="id" property="id"/>
+        <result column="purchase_number" property="foodId"/>
+        <result column="supplier" property="supplier"/>
+        <result column="batch_number" property="batchNumber"/>
+        <result column="quantity" property="quantity"/>
+        <result column="production_date" property="productionDate"/>
+        <result column="shelfLife" property="shelfLife"/>
+        <result column="purchaseDate" property="purchaseDate"/>
+        <result column="purchaser" property="purchaser"/>
+        <result column="image_path" property="imagePath"/>
+    </resultMap>
+
+
+</mapper> 
