@@ -9,8 +9,6 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 /**
  * Web配置类
  * 用于注册拦截器等Web相关配置
- *
- * @author Claude
  * @since 2024-04-08
  */
 @Configuration

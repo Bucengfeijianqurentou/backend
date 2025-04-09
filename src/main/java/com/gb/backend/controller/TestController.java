@@ -1,5 +1,6 @@
 package com.gb.backend.controller;
 
+import com.gb.backend.annotation.PassToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +18,13 @@ public class TestController {
     @GetMapping("h1")
     public String h1(){
         return "Hello World!";
+    }
+
+
+    @PassToken
+    @GetMapping("h2")
+    public String h2(){
+        return "Hello World2!";
     }
 
 

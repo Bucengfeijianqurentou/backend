@@ -10,8 +10,6 @@ import java.time.LocalDateTime;
 /**
  * MyBatis-Plus 自动填充处理器
  * 用于自动填充创建时间和更新时间
- *
- * @author Claude
  * @since 2024-04-08
  */
 @Slf4j

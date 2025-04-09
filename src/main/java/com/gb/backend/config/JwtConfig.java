@@ -6,8 +6,6 @@ import org.springframework.stereotype.Component;
 
 /**
  * JWT配置类
- *
- * @author Claude
  * @since 2024-04-08
  */
 @Data

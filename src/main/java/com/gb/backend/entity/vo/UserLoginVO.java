@@ -5,8 +5,6 @@ import lombok.Data;
 
 /**
  * 用户登录响应DTO
- *
- * @author Claude
  * @since 2024-04-08
  */
 @Data

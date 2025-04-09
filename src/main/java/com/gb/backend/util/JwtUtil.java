@@ -18,8 +18,6 @@ import java.util.Map;
 /**
  * JWT工具类
  * 用于生成和解析JWT token
- *
- * @author Claude
  * @since 2024-04-08
  */
 @Component

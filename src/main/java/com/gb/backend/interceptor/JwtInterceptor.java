@@ -1,6 +1,7 @@
 package com.gb.backend.interceptor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.gb.backend.annotation.PassToken;
 import com.gb.backend.common.Result;
 import com.gb.backend.config.JwtConfig;
 import com.gb.backend.util.JwtUtil;
@@ -10,13 +11,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
+import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 /**
  * JWT拦截器
  * 用于验证请求中的token
- *
- * @author Claude
  * @since 2024-04-08
  */
 @Component
@@ -29,6 +29,17 @@ public class JwtInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        // 如果不是映射到方法，直接通过
+        if (!(handler instanceof HandlerMethod handlerMethod)) {
+            return true;
+        }
+
+        // 检查是否有PassToken注解，有则跳过认证
+        if (handlerMethod.hasMethodAnnotation(PassToken.class) || 
+            handlerMethod.getBeanType().isAnnotationPresent(PassToken.class)) {
+            return true;
+        }
+        
         // 从请求头中获取token
         String header = request.getHeader(jwtConfig.getHeader());
         String token = jwtUtil.extractToken(header);
