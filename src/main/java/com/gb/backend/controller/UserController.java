@@ -2,10 +2,12 @@ package com.gb.backend.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gb.backend.common.Result;
+import com.gb.backend.controller.dto.UserLoginVO;
+import com.gb.backend.entity.User;
 import com.gb.backend.entity.dto.UserLoginDTO;
 import com.gb.backend.entity.dto.UserRegisterDTO;
-import com.gb.backend.entity.User;
 import com.gb.backend.service.UserService;
+import com.gb.backend.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,17 +22,19 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     
     private final UserService userService;
+    private final JwtUtil jwtUtil;
 
     /**
      * 用户登录
      *
      * @param loginDTO 登录参数
-     * @return 登录成功的用户信息
+     * @return 登录成功的用户信息和token
      */
     @PostMapping("/login")
-    public Result<User> login(@RequestBody UserLoginDTO loginDTO) {
+    public Result<UserLoginVO> login(@RequestBody UserLoginDTO loginDTO) {
         User user = userService.login(loginDTO);
-        return Result.success(user);
+        String token = jwtUtil.generateToken(user);
+        return Result.success(new UserLoginVO(user, token));
     }
 
     /**
