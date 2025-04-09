@@ -1,4 +1,4 @@
-package com.gb.backend.controller.dto;
+package com.gb.backend.entity.vo;
 
 import com.gb.backend.entity.User;
 import lombok.Data;

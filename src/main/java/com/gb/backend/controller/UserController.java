@@ -2,7 +2,7 @@ package com.gb.backend.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gb.backend.common.Result;
-import com.gb.backend.controller.dto.UserLoginVO;
+import com.gb.backend.entity.vo.UserLoginVO;
 import com.gb.backend.entity.User;
 import com.gb.backend.entity.dto.UserLoginDTO;
 import com.gb.backend.entity.dto.UserRegisterDTO;

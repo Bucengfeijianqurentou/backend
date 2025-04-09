@@ -23,6 +23,19 @@ spring:
       # 允许对象忽略json中不存在的属性
       fail_on_unknown_properties: false
 
+# JWT配置
+jwt:
+  # JWT密钥
+  secret-key: your-custom-secret-key-must-be-longer-than-256-bits
+  # token有效期（毫秒）
+  expiration: 86400000  # 24小时
+  # token签发者
+  issuer: canteen-supervision
+  # token在header中的名称
+  header: Authorization
+  # token前缀
+  token-prefix: Bearer 
+
 # MyBatis Plus 配置
 mybatis-plus:
   mapper-locations: classpath*:/mapper/**/*.xml

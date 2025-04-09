@@ -1,13 +1,16 @@
 package com.gb.backend.util;
 
+import com.gb.backend.config.JwtConfig;
 import com.gb.backend.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,17 +23,17 @@ import java.util.Map;
  * @since 2024-04-08
  */
 @Component
+@RequiredArgsConstructor
 public class JwtUtil {
 
-    /**
-     * 密钥
-     */
-    private static final SecretKey SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS512);
+    private final JwtConfig jwtConfig;
     
     /**
-     * token有效期（毫秒）
+     * 获取密钥
      */
-    private static final long EXPIRATION = 24 * 60 * 60 * 1000; // 24小时
+    private SecretKey getSecretKey() {
+        return Keys.hmacShaKeyFor(jwtConfig.getSecretKey().getBytes(StandardCharsets.UTF_8));
+    }
 
     /**
      * 生成token
@@ -47,9 +50,10 @@ public class JwtUtil {
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(user.getUsername())
+                .setIssuer(jwtConfig.getIssuer())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + EXPIRATION))
-                .signWith(SECRET_KEY)
+                .setExpiration(new Date(System.currentTimeMillis() + jwtConfig.getExpiration()))
+                .signWith(getSecretKey())
                 .compact();
     }
 
@@ -84,7 +88,7 @@ public class JwtUtil {
     public boolean validateToken(String token) {
         try {
             Jwts.parserBuilder()
-                .setSigningKey(SECRET_KEY)
+                .setSigningKey(getSecretKey())
                 .build()
                 .parseClaimsJws(token);
             return true;
@@ -101,9 +105,22 @@ public class JwtUtil {
      */
     private Claims getClaimsFromToken(String token) {
         return Jwts.parserBuilder()
-                .setSigningKey(SECRET_KEY)
+                .setSigningKey(getSecretKey())
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
+    }
+
+    /**
+     * 从请求头中提取token
+     *
+     * @param header 请求头中的token
+     * @return token字符串
+     */
+    public String extractToken(String header) {
+        if (header != null && header.startsWith(jwtConfig.getTokenPrefix())) {
+            return header.substring(jwtConfig.getTokenPrefix().length()).trim();
+        }
+        return null;
     }
 } 
