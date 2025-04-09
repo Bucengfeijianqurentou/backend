@@ -6,8 +6,11 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
@@ -25,6 +28,7 @@ import java.util.Map;
 public class JwtUtil {
 
     private final JwtConfig jwtConfig;
+    private final HttpServletRequest request;
     
     /**
      * 获取密钥
@@ -120,5 +124,16 @@ public class JwtUtil {
             return header.substring(jwtConfig.getTokenPrefix().length()).trim();
         }
         return null;
+    }
+
+    /**
+     * 获取当前登录用户的用户名
+     *
+     * @return 当前登录用户的用户名
+     */
+    public String getCurrentUsername() {
+        String header = request.getHeader("Authorization");
+        String token = extractToken(header);
+        return getUsernameFromToken(token);
     }
 } 

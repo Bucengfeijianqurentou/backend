@@ -118,4 +118,16 @@ public class UserController {
     public User getByUsername(@PathVariable String username) {
         return userService.findByUsername(username);
     }
+
+    /**
+     * 获取当前登录用户信息
+     * @return 当前登录用户信息
+     */
+    @GetMapping("/info")
+    public Result<User> getCurrentUser() {
+        // 从 JWT 中获取用户名
+        String username = jwtUtil.getCurrentUsername();
+        User user = userService.findByUsername(username);
+        return Result.success(user);
+    }
 } 
