@@ -45,4 +45,14 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseMapper, Purchase> i
                         .eq(Purchase::getPurchaserId, purchaserId)
                         .orderByDesc(Purchase::getPurchaseDate));
     }
+
+    @Override
+    public Page<Purchase> searchByKeyword(String keyword, int page, int size) {
+        return page(new Page<>(page, size),
+                new LambdaQueryWrapper<Purchase>()
+                        .like(Purchase::getName, keyword)
+                        .or()
+                        .like(Purchase::getSupplier, keyword)
+                        .orderByDesc(Purchase::getPurchaseDate));
+    }
 } 

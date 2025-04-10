@@ -43,4 +43,13 @@ public interface PurchaseService extends IService<Purchase> {
      * @return 分页后的采购记录
      */
     Page<Purchase> findByPurchaserId(String purchaserId, int page, int size);
+
+    /**
+     * 根据关键词搜索采购记录（食品名称或供应商）
+     * @param keyword 搜索关键词
+     * @param page 页码
+     * @param size 每页大小
+     * @return 分页后的采购记录
+     */
+    Page<Purchase> searchByKeyword(String keyword, int page, int size);
 } 

@@ -15,6 +15,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 采购管理控制器
@@ -111,12 +113,33 @@ public class PurchaseController {
      * 分页查询采购记录
      * @param page 页码
      * @param size 每页大小
+     * @param keyword 搜索关键词（可选）
      * @return 分页后的采购记录
      */
     @GetMapping
     public Result<Page<Purchase>> list(
             @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "10") int size) {
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) String keyword) {
+        if (keyword != null && !keyword.isEmpty()) {
+            // 如果关键词是批次号格式
+            if (keyword.startsWith("PO-")) {
+                Purchase purchase = purchaseService.findByBatchNumber(keyword);
+                if (purchase != null) {
+                    Page<Purchase> result = new Page<>(page, size);
+                    List<Purchase> records = new ArrayList<>();
+                    records.add(purchase);
+                    result.setRecords(records);
+                    result.setTotal(1);
+                    return Result.success(result);
+                } else {
+                    return Result.success(new Page<>(page, size));
+                }
+            }
+            
+            // 否则按名称或供应商搜索
+            return Result.success(purchaseService.searchByKeyword(keyword, page, size));
+        }
         return Result.success(purchaseService.page(new Page<>(page, size)));
     }
 
