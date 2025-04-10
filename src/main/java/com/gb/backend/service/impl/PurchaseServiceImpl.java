@@ -14,7 +14,7 @@ import java.time.LocalDate;
  */
 @Service
 public class PurchaseServiceImpl extends ServiceImpl<PurchaseMapper, Purchase> implements PurchaseService {
-    
+
     @Override
     public Purchase findByBatchNumber(String batchNumber) {
         return getOne(new LambdaQueryWrapper<Purchase>()
@@ -31,10 +31,18 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseMapper, Purchase> i
     }
 
     @Override
-    public Page<Purchase> findByFoodId(Integer foodId, int page, int size) {
+    public Page<Purchase> findBySupplier(String supplier, int page, int size) {
         return page(new Page<>(page, size),
                 new LambdaQueryWrapper<Purchase>()
-                        .eq(Purchase::getFoodId, foodId)
+                        .eq(Purchase::getSupplier, supplier)
+                        .orderByDesc(Purchase::getPurchaseDate));
+    }
+
+    @Override
+    public Page<Purchase> findByPurchaserId(String purchaserId, int page, int size) {
+        return page(new Page<>(page, size),
+                new LambdaQueryWrapper<Purchase>()
+                        .eq(Purchase::getPurchaser_id, purchaserId)
                         .orderByDesc(Purchase::getPurchaseDate));
     }
 } 

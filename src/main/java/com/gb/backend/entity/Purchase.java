@@ -19,9 +19,9 @@ public class Purchase {
     private Integer id;
     
     /**
-     * 食品ID
+     * 食品名称
      */
-    private Integer foodId;
+    private String name;
 
     /**
      * 供应商名称
@@ -54,9 +54,9 @@ public class Purchase {
     private LocalDate purchaseDate;
 
     /**
-     * 采购人员
+     * 采购人员id
      */
-    private String purchaser;
+    private String purchaser_id;
 
     /**
      * 采购相关图片路径

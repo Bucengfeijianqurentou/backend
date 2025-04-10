@@ -27,11 +27,20 @@ public interface PurchaseService extends IService<Purchase> {
     Page<Purchase> findByDateRange(LocalDate startDate, LocalDate endDate, int page, int size);
 
     /**
-     * 根据食品ID查询采购记录
-     * @param foodId 食品ID
+     * 根据供应商名称查询采购记录
+     * @param supplier 供应商名称
      * @param page 页码
      * @param size 每页大小
      * @return 分页后的采购记录
      */
-    Page<Purchase> findByFoodId(Integer foodId, int page, int size);
+    Page<Purchase> findBySupplier(String supplier, int page, int size);
+
+    /**
+     * 根据采购人员ID查询采购记录
+     * @param purchaserId 采购人员ID
+     * @param page 页码
+     * @param size 每页大小
+     * @return 分页后的采购记录
+     */
+    Page<Purchase> findByPurchaserId(String purchaserId, int page, int size);
 } 

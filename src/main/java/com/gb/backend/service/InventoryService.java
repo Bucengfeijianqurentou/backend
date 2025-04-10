@@ -12,9 +12,7 @@ public interface InventoryService extends IService<Inventory> {
     /**
      * 根据食品ID查询库存记录
      * @param foodId 食品ID
-     * @param page 页码
-     * @param size 每页大小
-     * @return 分页后的库存记录
+     * @return 库存记录列表
      */
     Page<Inventory> findByFoodId(Integer foodId, int page, int size);
 
@@ -26,27 +24,17 @@ public interface InventoryService extends IService<Inventory> {
     Inventory findByBatchNumber(String batchNumber);
 
     /**
-     * 根据库存状态查询库存记录
-     * @param status 库存状态
-     * @param page 页码
-     * @param size 每页大小
-     * @return 分页后的库存记录
-     */
-    Page<Inventory> findByStatus(InventoryStatus status, int page, int size);
-
-    /**
-     * 更新库存数量
-     * @param id 库存ID
-     * @param quantity 更新后的数量
+     * 更新库存剩余数量
+     * @param id 库存记录ID
+     * @param quantity 更新的数量
      * @return 是否更新成功
      */
-    boolean updateQuantity(Integer id, Integer quantity);
+    boolean updateRemainingQuantity(Integer id, Integer quantity);
 
     /**
-     * 更新库存状态
-     * @param id 库存ID
-     * @param status 更新后的状态
-     * @return 是否更新成功
+     * 查询库存不足的记录（剩余数量小于指定值）
+     * @param threshold 阈值
+     * @return 库存不足的记录列表
      */
-    boolean updateStatus(Integer id, InventoryStatus status);
+    Page<Inventory> findLowStock(Integer threshold, int page, int size);
 } 

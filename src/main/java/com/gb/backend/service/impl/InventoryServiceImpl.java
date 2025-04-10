@@ -7,7 +7,6 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.gb.backend.entity.Inventory;
 import com.gb.backend.mapper.InventoryMapper;
 import com.gb.backend.service.InventoryService;
-import com.gb.backend.common.enums.InventoryStatus;
 import org.springframework.stereotype.Service;
 
 /**
@@ -20,7 +19,8 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
     public Page<Inventory> findByFoodId(Integer foodId, int page, int size) {
         return page(new Page<>(page, size),
                 new LambdaQueryWrapper<Inventory>()
-                        .eq(Inventory::getFoodId, foodId));
+                        .eq(Inventory::getFoodId, foodId)
+                        .orderByDesc(Inventory::getId));
     }
 
     @Override
@@ -30,23 +30,17 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
     }
 
     @Override
-    public Page<Inventory> findByStatus(InventoryStatus status, int page, int size) {
+    public boolean updateRemainingQuantity(Integer id, Integer quantity) {
+        return update(new LambdaUpdateWrapper<Inventory>()
+                .eq(Inventory::getId, id)
+                .set(Inventory::getRemaining_quantity, quantity));
+    }
+
+    @Override
+    public Page<Inventory> findLowStock(Integer threshold, int page, int size) {
         return page(new Page<>(page, size),
                 new LambdaQueryWrapper<Inventory>()
-                        .eq(Inventory::getStatus, status));
-    }
-
-    @Override
-    public boolean updateQuantity(Integer id, Integer quantity) {
-        return update(new LambdaUpdateWrapper<Inventory>()
-                .eq(Inventory::getId, id)
-                .set(Inventory::getQuantity, quantity));
-    }
-
-    @Override
-    public boolean updateStatus(Integer id, InventoryStatus status) {
-        return update(new LambdaUpdateWrapper<Inventory>()
-                .eq(Inventory::getId, id)
-                .set(Inventory::getStatus, status));
+                        .le(Inventory::getRemaining_quantity, threshold)
+                        .orderByAsc(Inventory::getRemaining_quantity));
     }
 } 

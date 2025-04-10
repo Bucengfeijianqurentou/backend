@@ -1,7 +1,7 @@
 package com.gb.backend.common.enums;
 
 /**
- * 库存状态枚举
+ * 库存状态枚举（目前已废弃，后续再看看）
  */
 public enum InventoryStatus {
     UNPROCESSED("未加工"),

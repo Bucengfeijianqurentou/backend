@@ -26,6 +26,8 @@ public class User {
     
     private String phone;
     private String email;
+
+    private String realName;
     
     @TableField(fill = FieldFill.INSERT)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")

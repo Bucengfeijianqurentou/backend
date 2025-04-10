@@ -1,10 +1,8 @@
 package com.gb.backend.entity;
 
-import com.baomidou.mybatisplus.annotation.EnumValue;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.gb.backend.common.enums.InventoryStatus;
 import lombok.Data;
 
 /**
@@ -30,13 +28,12 @@ public class Inventory {
     private String batchNumber;
 
     /**
-     * 当前库存数量
+     * 总库存数量
      */
-    private Integer quantity;
+    private Integer total_quantity;
 
     /**
-     * 库存状态（未加工、已加工、已发放）
+     * 当前库存数量（剩余数量）
      */
-    @EnumValue
-    private InventoryStatus status;
+    private Integer remaining_quantity;
 } 
