@@ -2,10 +2,17 @@ package com.gb.backend.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gb.backend.common.Result;
+import com.gb.backend.entity.Food;
+import com.gb.backend.entity.Inventory;
 import com.gb.backend.entity.Purchase;
+import com.gb.backend.entity.dto.PurchaseRequestDTO;
+import com.gb.backend.service.FoodService;
+import com.gb.backend.service.InventoryService;
 import com.gb.backend.service.PurchaseService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.BeanUtils;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 
@@ -18,6 +25,43 @@ import java.time.LocalDate;
 public class PurchaseController {
     
     private final PurchaseService purchaseService;
+    private final FoodService foodService;
+    private final InventoryService inventoryService;
+
+    /**
+     * 创建采购记录（同时创建食品和库存记录）
+     * @param purchaseRequestDTO 采购请求DTO
+     * @return 创建结果
+     */
+    @PostMapping("/create")
+    @Transactional
+    public Result<Purchase> createWithFoodAndInventory(@RequestBody PurchaseRequestDTO purchaseRequestDTO) {
+        Integer foodId;
+        System.out.println(purchaseRequestDTO);
+        // 1. 创建新食品记录
+        Food food = new Food();
+        food.setName(purchaseRequestDTO.getName());
+        food.setDescription(purchaseRequestDTO.getDescription());
+        foodService.save(food);
+        foodId = food.getId();
+        
+        // 2. 创建采购记录
+        Purchase purchase = new Purchase();
+        BeanUtils.copyProperties(purchaseRequestDTO, purchase);
+        purchase.setPurchaserId(purchaseRequestDTO.getPurchaserId());
+        purchaseService.save(purchase);
+        
+        // 3. 创建库存记录
+        Inventory inventory = new Inventory();
+        inventory.setFoodId(foodId);
+        inventory.setBatchNumber(purchaseRequestDTO.getBatchNumber());
+        inventory.setTotalQuantity(purchaseRequestDTO.getQuantity());
+        inventory.setRemainingQuantity(purchaseRequestDTO.getQuantity());
+        
+        inventoryService.save(inventory);
+        
+        return Result.success(purchase);
+    }
 
     /**
      * 创建采购记录

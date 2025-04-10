@@ -1,7 +1,7 @@
 package com.gb.backend.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.gb.backend.annotation.PassToken;
+import com.gb.backend.common.Result;
 import com.gb.backend.entity.Supplier;
 import com.gb.backend.service.SupplierService;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +18,15 @@ import java.util.List;
 public class SupplierController {
     
     private final SupplierService supplierService;
+
+    /**
+     * 获取所有供应商列表（不分页）
+     * @return 所有供应商列表
+     */
+    @GetMapping("/all")
+    public Result<List<Supplier>> getAllSuppliers() {
+        return Result.success(supplierService.list());
+    }
 
     /**
      * 创建供应商

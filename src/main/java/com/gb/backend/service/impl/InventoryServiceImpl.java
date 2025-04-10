@@ -33,14 +33,14 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
     public boolean updateRemainingQuantity(Integer id, Integer quantity) {
         return update(new LambdaUpdateWrapper<Inventory>()
                 .eq(Inventory::getId, id)
-                .set(Inventory::getRemaining_quantity, quantity));
+                .set(Inventory::getRemainingQuantity, quantity));
     }
 
     @Override
     public Page<Inventory> findLowStock(Integer threshold, int page, int size) {
         return page(new Page<>(page, size),
                 new LambdaQueryWrapper<Inventory>()
-                        .le(Inventory::getRemaining_quantity, threshold)
-                        .orderByAsc(Inventory::getRemaining_quantity));
+                        .le(Inventory::getRemainingQuantity, threshold)
+                        .orderByAsc(Inventory::getRemainingQuantity));
     }
 } 

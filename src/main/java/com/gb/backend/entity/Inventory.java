@@ -30,10 +30,10 @@ public class Inventory {
     /**
      * 总库存数量
      */
-    private Integer total_quantity;
+    private Integer totalQuantity;
 
     /**
      * 当前库存数量（剩余数量）
      */
-    private Integer remaining_quantity;
+    private Integer remainingQuantity;
 } 
