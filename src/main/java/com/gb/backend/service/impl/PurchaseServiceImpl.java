@@ -42,7 +42,7 @@ public class PurchaseServiceImpl extends ServiceImpl<PurchaseMapper, Purchase> i
     public Page<Purchase> findByPurchaserId(String purchaserId, int page, int size) {
         return page(new Page<>(page, size),
                 new LambdaQueryWrapper<Purchase>()
-                        .eq(Purchase::getPurchaser_id, purchaserId)
+                        .eq(Purchase::getPurchaserId, purchaserId)
                         .orderByDesc(Purchase::getPurchaseDate));
     }
 } 

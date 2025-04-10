@@ -32,7 +32,14 @@ spring:
   servlet:
     multipart:
       max-file-size: 10MB
-      max-request-size: 10MB
+      max-request-size: 100MB
+
+  web:
+    resources:
+      static-locations:
+        - classpath:/static/
+        - classpath:/public/
+        - file:../img/  # 添加外部图片目录映射
 
 # JWT配置
 jwt:
@@ -70,9 +77,6 @@ mybatis-plus:
 
 file:
   upload:
-    # 文件上传根路径（使用Maven项目根目录）
-    base-path: ${project.basedir}/../img
-    # 允许上传的文件类型
-    allowed-types: .jpg,.jpeg,.png,.gif,.pdf,.doc,.docx,.xls,.xlsx
-    # 文件大小限制（单位：MB）
-    max-size: 10
+    path: ../img  # 修改为项目同级目录的img文件夹
+    url-prefix: /img/  # 访问URL前缀
+

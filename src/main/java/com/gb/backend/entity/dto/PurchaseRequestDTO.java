@@ -1,23 +1,13 @@
-package com.gb.backend.entity;
+package com.gb.backend.entity.dto;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+
 import java.time.LocalDate;
 
-/**
- * 采购记录实体
- */
 @Data
-@TableName("purchases")
-public class Purchase {
-    /**
-     * 采购记录ID
-     */
-    @TableId(type = IdType.AUTO)
-    private Integer id;
-    
+public class PurchaseRequestDTO {
+
+    /*Purchase相关*/
     /**
      * 食品名称
      */
@@ -62,4 +52,12 @@ public class Purchase {
      * 采购相关图片路径
      */
     private String imagePath;
-} 
+
+
+    /**
+     * 食品描述
+     */
+    private String description;
+
+
+}
