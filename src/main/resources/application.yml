@@ -23,6 +23,12 @@ spring:
       # 允许对象忽略json中不存在的属性
       fail_on_unknown_properties: false
 
+  devtools:
+    restart:
+      enabled: true  # 开启热部署
+      additional-paths: src/main/java # 重启目录
+      exclude: WEB-INF/**
+
 # JWT配置
 jwt:
   # JWT密钥

@@ -1,6 +1,7 @@
 package com.gb.backend.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.gb.backend.annotation.PassToken;
 import com.gb.backend.entity.Supplier;
 import com.gb.backend.service.SupplierService;
 import lombok.RequiredArgsConstructor;
