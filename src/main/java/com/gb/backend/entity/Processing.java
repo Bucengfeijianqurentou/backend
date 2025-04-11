@@ -21,12 +21,20 @@ public class Processing {
     @TableId(type = IdType.AUTO)
     private Integer id;
 
-
     /**
      * 加工人员ID（食堂工作人员）
      */
     private Integer processorId;
-
+    
+    /**
+     * 加工人员姓名
+     */
+    private String processorName;
+    
+    /**
+     * 加工人员联系方式
+     */
+    private String processorPhone;
 
     /**
      * 批次号（加工批次号）

@@ -48,6 +48,11 @@ public class ProcessingController {
             return Result.error("批次号不能为空");
         }
         
+        // 验证加工人ID不为空
+        if (processing.getProcessorId() == null) {
+            return Result.error("加工人ID不能为空");
+        }
+        
         // 设置加工时间（如果为空）
         if (processing.getProcessingTime() == null) {
             processing.setProcessingTime(LocalDateTime.now());
