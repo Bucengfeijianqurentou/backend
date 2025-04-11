@@ -4,7 +4,9 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gb.backend.common.Result;
 import com.gb.backend.common.enums.HygieneCondition;
 import com.gb.backend.entity.Processing;
+import com.gb.backend.entity.Inventory;
 import com.gb.backend.service.ProcessingService;
+import com.gb.backend.service.InventoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +23,7 @@ import java.util.Map;
 public class ProcessingController {
     
     private final ProcessingService processingService;
+    private final InventoryService inventoryService;
 
     /**
      * 创建加工记录
@@ -50,8 +53,23 @@ public class ProcessingController {
             processing.setProcessingTime(LocalDateTime.now());
         }
         
+        // 获取对应的库存记录
+        Inventory inventory = inventoryService.findByBatchNumber(processing.getBatchNumber());
+        if (inventory == null) {
+            return Result.error("未找到对应的库存记录");
+        }
+        
+        // 检查库存是否足够
+        if (inventory.getRemainingQuantity() < processing.getQuantity()) {
+            return Result.error("库存不足，当前剩余: " + inventory.getRemainingQuantity());
+        }
+        
         // 保存加工记录
         processingService.save(processing);
+        
+        // 更新库存数量
+        int remainingQuantity = inventory.getRemainingQuantity() - processing.getQuantity();
+        inventoryService.updateRemainingQuantity(inventory.getId(), remainingQuantity);
         
         return Result.success(processing);
     }

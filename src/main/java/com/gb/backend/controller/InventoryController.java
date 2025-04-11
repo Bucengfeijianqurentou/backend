@@ -3,9 +3,12 @@ package com.gb.backend.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gb.backend.common.Result;
 import com.gb.backend.entity.Inventory;
+import com.gb.backend.entity.dto.InventoryDetailDTO;
 import com.gb.backend.service.InventoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * 库存管理控制器
@@ -125,5 +128,24 @@ public class InventoryController {
             @RequestParam(defaultValue = "1") int page,
             @RequestParam(defaultValue = "10") int size) {
         return Result.success(inventoryService.findLowStock(threshold, page, size));
+    }
+
+    /**
+     * 获取所有可用的库存记录（剩余数量>0）
+     * @return 可用库存记录列表
+     */
+    @GetMapping("/available")
+    public Result<List<Inventory>> getAvailableInventory() {
+        return Result.success(inventoryService.findAvailableInventory());
+    }
+
+    /**
+     * 获取库存详情（含食品名称）
+     * @param batchNumber 批次号
+     * @return 库存详情
+     */
+    @GetMapping("/detail/{batchNumber}")
+    public Result<InventoryDetailDTO> getInventoryDetail(@PathVariable String batchNumber) {
+        return Result.success(inventoryService.getInventoryDetail(batchNumber));
     }
 } 

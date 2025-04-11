@@ -4,6 +4,9 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.gb.backend.entity.Inventory;
 import com.gb.backend.common.enums.InventoryStatus;
+import com.gb.backend.entity.dto.InventoryDetailDTO;
+
+import java.util.List;
 
 /**
  * 库存服务接口
@@ -22,6 +25,13 @@ public interface InventoryService extends IService<Inventory> {
      * @return 库存记录
      */
     Inventory findByBatchNumber(String batchNumber);
+    
+    /**
+     * 获取库存详情（包含食品信息）
+     * @param batchNumber 批次号
+     * @return 库存详情DTO
+     */
+    InventoryDetailDTO getInventoryDetail(String batchNumber);
 
     /**
      * 更新库存剩余数量
@@ -37,4 +47,10 @@ public interface InventoryService extends IService<Inventory> {
      * @return 库存不足的记录列表
      */
     Page<Inventory> findLowStock(Integer threshold, int page, int size);
+    
+    /**
+     * 查询所有可用库存记录（剩余数量>0）
+     * @return 可用库存记录列表
+     */
+    List<Inventory> findAvailableInventory();
 } 
