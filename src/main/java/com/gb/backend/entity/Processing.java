@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.EnumValue;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.gb.backend.common.enums.HygieneCondition;
 import lombok.Data;
 import java.time.LocalDateTime;
@@ -20,19 +21,22 @@ public class Processing {
     @TableId(type = IdType.AUTO)
     private Integer id;
 
-    /**
-     * 采购记录ID
-     */
-    private Integer purchaseId;
 
     /**
      * 加工人员ID（食堂工作人员）
      */
     private Integer processorId;
 
+
+    /**
+     * 批次号（加工批次号）
+     */
+    private String batchNumber;
+
     /**
      * 加工时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime processingTime;
 
     /**
@@ -50,4 +54,9 @@ public class Processing {
      */
     @EnumValue
     private HygieneCondition hygieneCondition;
+
+    /**
+     * 图片路径
+     */
+    private String imagePath;
 } 
