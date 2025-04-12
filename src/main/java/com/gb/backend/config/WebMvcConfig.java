@@ -1,6 +1,7 @@
 package com.gb.backend.config;
 
 import com.gb.backend.config.converter.StringToMealTypeConverter;
+import com.gb.backend.config.converter.StringToMenuStatusConverter;
 import com.gb.backend.interceptor.JwtInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
@@ -19,6 +20,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     private final JwtInterceptor jwtInterceptor;
     private final StringToMealTypeConverter stringToMealTypeConverter;
+    private final StringToMenuStatusConverter stringToMenuStatusConverter;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
@@ -32,7 +34,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
                         "/v3/api-docs/**"
                 );
     }
-    
+
     /**
      * 添加自定义转换器，支持字符串到枚举的自动转换
      */
@@ -40,5 +42,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addFormatters(FormatterRegistry registry) {
         // 添加自定义的字符串到餐次类型转换器
         registry.addConverter(stringToMealTypeConverter);
+        // 添加自定义的字符串到菜单状态转换器
+        registry.addConverter(stringToMenuStatusConverter);
     }
 } 

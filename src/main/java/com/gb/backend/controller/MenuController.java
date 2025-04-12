@@ -166,7 +166,7 @@ public class MenuController {
      * 更新菜单状态
      *
      * @param id 菜单ID
-     * @param status 状态代码 ("0"-未发放, "1"-已发放)
+     * @param status 状态代码 ("0"-待审查, "1"-可发放, "2"-已发放)
      * @return 更新结果
      */
     @PutMapping("/{id}/status")

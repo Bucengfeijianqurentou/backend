@@ -8,8 +8,9 @@ import com.fasterxml.jackson.annotation.JsonValue;
  * 菜单状态枚举
  */
 public enum MenuStatus {
-    UNPUBLISHED("0", "未发放"),
-    PUBLISHED("1", "已发放");
+    PENDING("0", "待审查"),
+    APPROVED("1", "可发放"),
+    PUBLISHED("2", "已发放");
 
     /**
      * 状态码
