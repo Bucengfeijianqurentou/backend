@@ -5,11 +5,10 @@
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.gb.backend.entity.Distribution">
         <id column="id" property="id"/>
-        <id column="processing_id" property="processingId"/>
-        <result column="food_id" property="foodId"/>
+        <result column="menu_id" property="menuId"/>
         <result column="distribution_time" property="distributionTime"/>
-        <result column="quantity" property="quantity"/>
         <result column="recipient" property="recipient"/>
+        <result column="distributor" property="distributor"/>
     </resultMap>
 
 

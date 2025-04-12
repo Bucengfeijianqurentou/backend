@@ -16,50 +16,44 @@ import java.time.LocalDateTime;
 public class DistributionServiceImpl extends ServiceImpl<DistributionMapper, Distribution> implements DistributionService {
 
     @Override
-    public Page<Distribution> findByProcessingId(Integer processingId, int page, int size) {
-        return page(new Page<>(page, size),
-                new LambdaQueryWrapper<Distribution>()
-                        .eq(Distribution::getProcessingId, processingId)
-                        .orderByDesc(Distribution::getDistributionTime));
+    public Page<Distribution> getDistributionPage(int page, int size) {
+        return page(new Page<>(page, size));
     }
 
     @Override
-    public Page<Distribution> findByFoodId(Integer foodId, int page, int size) {
-        return page(new Page<>(page, size),
-                new LambdaQueryWrapper<Distribution>()
-                        .eq(Distribution::getFoodId, foodId)
-                        .orderByDesc(Distribution::getDistributionTime));
-    }
-
-    @Override
-    public Page<Distribution> findByTimeRange(LocalDateTime startTime, LocalDateTime endTime, int page, int size) {
-        return page(new Page<>(page, size),
-                new LambdaQueryWrapper<Distribution>()
-                        .ge(Distribution::getDistributionTime, startTime)
-                        .le(Distribution::getDistributionTime, endTime)
-                        .orderByDesc(Distribution::getDistributionTime));
-    }
-
-    @Override
-    public Page<Distribution> findByRecipient(String recipient, int page, int size) {
-        return page(new Page<>(page, size),
-                new LambdaQueryWrapper<Distribution>()
-                        .eq(Distribution::getRecipient, recipient)
-                        .orderByDesc(Distribution::getDistributionTime));
-    }
-
-    @Override
-    public Integer calculateTotalQuantity(LocalDateTime startTime, LocalDateTime endTime, Integer foodId) {
-        LambdaQueryWrapper<Distribution> wrapper = new LambdaQueryWrapper<Distribution>()
-                .ge(Distribution::getDistributionTime, startTime)
-                .le(Distribution::getDistributionTime, endTime);
-
-        if (foodId != null) {
-            wrapper.eq(Distribution::getFoodId, foodId);
+    public Page<Distribution> getDistributionByTimeRange(int page, int size, LocalDateTime startTime, LocalDateTime endTime) {
+        LambdaQueryWrapper<Distribution> queryWrapper = new LambdaQueryWrapper<>();
+        
+        if (startTime != null) {
+            queryWrapper.ge(Distribution::getDistributionTime, startTime);
         }
+        
+        if (endTime != null) {
+            queryWrapper.le(Distribution::getDistributionTime, endTime);
+        }
+        
+        // 按发放时间降序排序
+        queryWrapper.orderByDesc(Distribution::getDistributionTime);
+        
+        return page(new Page<>(page, size), queryWrapper);
+    }
 
-        return list(wrapper).stream()
-                .mapToInt(Distribution::getQuantity)
-                .sum();
+    @Override
+    public Page<Distribution> getDistributionByMenuId(int page, int size, Integer menuId) {
+        LambdaQueryWrapper<Distribution> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(Distribution::getMenuId, menuId)
+                   .orderByDesc(Distribution::getDistributionTime);
+        
+        return page(new Page<>(page, size), queryWrapper);
+    }
+
+    @Override
+    public boolean createDistribution(Distribution distribution) {
+        // 设置发放时间为当前时间（如果未设置）
+        if (distribution.getDistributionTime() == null) {
+            distribution.setDistributionTime(LocalDateTime.now());
+        }
+        
+        return save(distribution);
     }
 }

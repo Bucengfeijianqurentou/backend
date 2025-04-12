@@ -1,6 +1,7 @@
 package com.gb.backend.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.gb.backend.common.Result;
 import com.gb.backend.entity.Distribution;
 import com.gb.backend.service.DistributionService;
 import lombok.RequiredArgsConstructor;
@@ -19,100 +20,121 @@ public class DistributionController {
     private final DistributionService distributionService;
 
     /**
-     * 分页查询发放记录
+     * 分页获取发放记录列表
+     *
+     * @param page 页码
+     * @param size 每页记录数
+     * @return 分页数据
      */
     @GetMapping
-    public Page<Distribution> list(@RequestParam(defaultValue = "1") int page,
-                                   @RequestParam(defaultValue = "10") int size) {
-        return distributionService.page(new Page<>(page, size));
+    public Result<Page<Distribution>> getDistributionList(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Page<Distribution> distributionPage = distributionService.getDistributionPage(page, size);
+        return Result.success(distributionPage);
     }
 
     /**
-     * 根据ID查询发放记录
+     * 根据ID获取发放记录详情
+     *
+     * @param id 发放记录ID
+     * @return 发放记录详情
      */
     @GetMapping("/{id}")
-    public Distribution getById(@PathVariable Integer id) {
-        return distributionService.getById(id);
+    public Result<Distribution> getDistributionById(@PathVariable Integer id) {
+        Distribution distribution = distributionService.getById(id);
+        if (distribution != null) {
+            return Result.success(distribution);
+        } else {
+            return Result.error("发放记录不存在");
+        }
     }
 
     /**
-     * 根据加工记录ID查询发放记录
-     */
-    @GetMapping("/processing/{processingId}")
-    public Page<Distribution> getByProcessingId(
-            @PathVariable Integer processingId,
-            @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        return distributionService.findByProcessingId(processingId, page, size);
-    }
-
-    /**
-     * 根据食品ID查询发放记录
-     */
-    @GetMapping("/food/{foodId}")
-    public Page<Distribution> getByFoodId(
-            @PathVariable Integer foodId,
-            @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        return distributionService.findByFoodId(foodId, page, size);
-    }
-
-    /**
-     * 根据时间范围查询发放记录
-     */
-    @GetMapping("/time-range")
-    public Page<Distribution> getByTimeRange(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startTime,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endTime,
-            @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        return distributionService.findByTimeRange(startTime, endTime, page, size);
-    }
-
-    /**
-     * 根据发放对象查询发放记录
-     */
-    @GetMapping("/recipient/{recipient}")
-    public Page<Distribution> getByRecipient(
-            @PathVariable String recipient,
-            @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        return distributionService.findByRecipient(recipient, page, size);
-    }
-
-    /**
-     * 统计发放总量
-     */
-    @GetMapping("/statistics/total-quantity")
-    public Integer getTotalQuantity(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startTime,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endTime,
-            @RequestParam(required = false) Integer foodId) {
-        return distributionService.calculateTotalQuantity(startTime, endTime, foodId);
-    }
-
-    /**
-     * 新增发放记录
+     * 创建发放记录
+     *
+     * @param distribution 发放记录信息
+     * @return 创建结果
      */
     @PostMapping
-    public boolean save(@RequestBody Distribution distribution) {
-        return distributionService.save(distribution);
+    public Result<Boolean> createDistribution(@RequestBody Distribution distribution) {
+        boolean success = distributionService.createDistribution(distribution);
+        if (success) {
+            return Result.success(true);
+        } else {
+            return Result.error("创建发放记录失败");
+        }
     }
 
     /**
      * 更新发放记录
+     *
+     * @param id 发放记录ID
+     * @param distribution 发放记录信息
+     * @return 更新结果
      */
     @PutMapping("/{id}")
-    public boolean update(@PathVariable Integer id, @RequestBody Distribution distribution) {
+    public Result<Boolean> updateDistribution(
+            @PathVariable Integer id,
+            @RequestBody Distribution distribution) {
         distribution.setId(id);
-        return distributionService.updateById(distribution);
+        boolean success = distributionService.updateById(distribution);
+        if (success) {
+            return Result.success(true);
+        } else {
+            return Result.error("更新发放记录失败");
+        }
     }
 
     /**
      * 删除发放记录
+     *
+     * @param id 发放记录ID
+     * @return 删除结果
      */
     @DeleteMapping("/{id}")
-    public boolean delete(@PathVariable Integer id) {
-        return distributionService.removeById(id);
+    public Result<Boolean> deleteDistribution(@PathVariable Integer id) {
+        boolean success = distributionService.removeById(id);
+        if (success) {
+            return Result.success(true);
+        } else {
+            return Result.error("删除发放记录失败");
+        }
+    }
+
+    /**
+     * 根据时间范围查询发放记录
+     *
+     * @param page 页码
+     * @param size 每页记录数
+     * @param startTime 开始时间
+     * @param endTime 结束时间
+     * @return 分页数据
+     */
+    @GetMapping("/time-range")
+    public Result<Page<Distribution>> getDistributionByTimeRange(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startTime,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endTime) {
+        Page<Distribution> distributionPage = distributionService.getDistributionByTimeRange(page, size, startTime, endTime);
+        return Result.success(distributionPage);
+    }
+
+    /**
+     * 根据菜单ID查询发放记录
+     *
+     * @param menuId 菜单ID
+     * @param page 页码
+     * @param size 每页记录数
+     * @return 分页数据
+     */
+    @GetMapping("/menu/{menuId}")
+    public Result<Page<Distribution>> getDistributionByMenuId(
+            @PathVariable Integer menuId,
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        Page<Distribution> distributionPage = distributionService.getDistributionByMenuId(page, size, menuId);
+        return Result.success(distributionPage);
     }
 }

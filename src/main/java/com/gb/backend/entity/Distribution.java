@@ -19,14 +19,9 @@ public class Distribution {
     private Integer id;
 
     /**
-     * 加工记录ID
+     * 菜单ID，外键，关联menus表的id
      */
-    private Integer processingId;
-
-    /**
-     * 食品ID
-     */
-    private Integer foodId;
+    private Integer menuId;
 
     /**
      * 发放时间
@@ -34,12 +29,12 @@ public class Distribution {
     private LocalDateTime distributionTime;
 
     /**
-     * 发放数量
-     */
-    private Integer quantity;
-
-    /**
      * 发放对象（如"初一年级"）
      */
     private String recipient;
+    
+    /**
+     * 发放人姓名
+     */
+    private String distributor;
 } 
