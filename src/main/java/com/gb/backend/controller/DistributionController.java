@@ -3,11 +3,15 @@ package com.gb.backend.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gb.backend.common.Result;
 import com.gb.backend.entity.Distribution;
+import com.gb.backend.entity.dto.BatchDistributeDTO;
 import com.gb.backend.service.DistributionService;
+import com.gb.backend.service.MenuService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 食品发放管理控制器
@@ -18,6 +22,7 @@ import java.time.LocalDateTime;
 public class DistributionController {
 
     private final DistributionService distributionService;
+    private final MenuService menuService;
 
     /**
      * 分页获取发放记录列表
@@ -136,5 +141,61 @@ public class DistributionController {
             @RequestParam(defaultValue = "10") int size) {
         Page<Distribution> distributionPage = distributionService.getDistributionByMenuId(page, size, menuId);
         return Result.success(distributionPage);
+    }
+
+    /**
+     * 菜单发放，创建发放记录
+     *
+     * @param distributeDTO 发放信息（菜单ID、发放对象列表、发放人姓名）
+     * @return 创建结果
+     */
+    @PostMapping("/batch")
+    public Result<Boolean> createDistribution(@RequestBody BatchDistributeDTO distributeDTO) {
+        // 获取菜单ID
+        Integer menuId = distributeDTO.getMenuId();
+        List<String> recipients = distributeDTO.getRecipients();
+        String distributor = distributeDTO.getDistributor();
+        
+        // 验证菜单ID是否有效
+        if (menuId == null || menuId <= 0) {
+            return Result.error("无效的菜单ID");
+        }
+        
+        // 验证发放对象列表
+        if (recipients == null || recipients.isEmpty()) {
+            return Result.error("发放对象列表不能为空");
+        }
+        
+        // 验证发放人
+        if (distributor == null || distributor.trim().isEmpty()) {
+            return Result.error("发放人不能为空");
+        }
+        
+        try {
+            // 创建单条发放记录，将多个发放对象合并为一个字符串，用逗号分隔
+            Distribution distribution = new Distribution();
+            distribution.setMenuId(menuId);
+            distribution.setDistributionTime(LocalDateTime.now());
+            
+            // 将多个发放对象合并为逗号分隔的字符串
+            String recipientStr = String.join("，", recipients);
+            distribution.setRecipient(recipientStr);
+            
+            // 设置发放人
+            distribution.setDistributor(distributor);
+            
+            // 保存发放记录
+            boolean success = distributionService.createDistribution(distribution);
+            
+            // 如果成功，更新菜单状态为"已发放"
+            if (success) {
+                menuService.updateMenuStatus(menuId, "2");
+                return Result.success(true);
+            } else {
+                return Result.error("创建发放记录失败");
+            }
+        } catch (Exception e) {
+            return Result.error("创建发放记录时发生错误: " + e.getMessage());
+        }
     }
 }
