@@ -10,6 +10,71 @@
         <result column="recipient" property="recipient"/>
         <result column="distributor" property="distributor"/>
     </resultMap>
-
-
+    
+    <!-- 发放记录联表查询结果映射 -->
+    <resultMap id="DistributionWithMenuMap" type="com.gb.backend.entity.dto.DistributionDTO">
+        <id column="id" property="id"/>
+        <result column="menu_id" property="menuId"/>
+        <result column="distribution_time" property="distributionTime"/>
+        <result column="recipient" property="recipient"/>
+        <result column="distributor" property="distributor"/>
+        <result column="menu_date" property="menuDate"/>
+        <result column="meal_type" property="mealType"/>
+        <result column="dishes" property="dishes"/>
+        <result column="status" property="menuStatus"/>
+        <result column="image_path" property="imagePath"/>
+    </resultMap>
+    
+    <!-- 分页查询发放记录及关联菜单信息 -->
+    <select id="selectDistributionWithMenu" resultMap="DistributionWithMenuMap">
+        SELECT 
+            d.id, 
+            d.menu_id, 
+            d.distribution_time, 
+            d.recipient, 
+            d.distributor,
+            m.menu_date,
+            m.meal_type,
+            m.dishes,
+            m.status,
+            m.image_path
+        FROM 
+            distributions d
+        LEFT JOIN 
+            menus m ON d.menu_id = m.id
+        <where>
+            <if test="startTime != null">
+                AND d.distribution_time &gt;= #{startTime}
+            </if>
+            <if test="endTime != null">
+                AND d.distribution_time &lt;= #{endTime}
+            </if>
+            <if test="menuId != null">
+                AND d.menu_id = #{menuId}
+            </if>
+        </where>
+        ORDER BY 
+            d.distribution_time DESC
+    </select>
+    
+    <!-- 根据ID查询发放记录及关联菜单信息 -->
+    <select id="selectDistributionWithMenuById" resultMap="DistributionWithMenuMap">
+        SELECT 
+            d.id, 
+            d.menu_id, 
+            d.distribution_time, 
+            d.recipient, 
+            d.distributor,
+            m.menu_date,
+            m.meal_type,
+            m.dishes,
+            m.status,
+            m.image_path
+        FROM 
+            distributions d
+        LEFT JOIN 
+            menus m ON d.menu_id = m.id
+        WHERE 
+            d.id = #{id}
+    </select>
 </mapper> 

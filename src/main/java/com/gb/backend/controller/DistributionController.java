@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.gb.backend.common.Result;
 import com.gb.backend.entity.Distribution;
 import com.gb.backend.entity.dto.BatchDistributeDTO;
+import com.gb.backend.entity.dto.DistributionDTO;
 import com.gb.backend.service.DistributionService;
 import com.gb.backend.service.MenuService;
 import lombok.RequiredArgsConstructor;
@@ -196,6 +197,47 @@ public class DistributionController {
             }
         } catch (Exception e) {
             return Result.error("创建发放记录时发生错误: " + e.getMessage());
+        }
+    }
+
+
+
+    /**
+     * 分页获取带菜单信息的发放记录列表
+     *
+     * @param page 页码
+     * @param size 每页记录数
+     * @param startTime 开始时间（可选）
+     * @param endTime 结束时间（可选）
+     * @param menuId 菜单ID（可选）
+     * @return 分页数据
+     */
+    @GetMapping("/with-menu")
+    public Result<Page<DistributionDTO>> getDistributionWithMenu(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime startTime,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime endTime,
+            @RequestParam(required = false) Integer menuId) {
+        Page<DistributionDTO> distributionPage = distributionService.getDistributionWithMenu(page, size, startTime, endTime, menuId);
+        return Result.success(distributionPage);
+    }
+
+
+
+    /**
+     * 根据ID获取带菜单信息的发放记录详情
+     *
+     * @param id 发放记录ID
+     * @return 发放记录详情
+     */
+    @GetMapping("/with-menu/{id}")
+    public Result<DistributionDTO> getDistributionWithMenuById(@PathVariable Integer id) {
+        DistributionDTO distribution = distributionService.getDistributionWithMenuById(id);
+        if (distribution != null) {
+            return Result.success(distribution);
+        } else {
+            return Result.error("发放记录不存在");
         }
     }
 }
