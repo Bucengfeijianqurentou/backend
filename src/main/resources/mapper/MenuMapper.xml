@@ -4,11 +4,7 @@
     
     <!-- 通用查询映射结果 -->
     <resultMap id="BaseResultMap" type="com.gb.backend.entity.Menu">
-        <id column="id" property="id"/>
-        <result column="menu_date" property="menuDate"/>
-        <result column="meal_type" property="mealType"/>
-        <result column="dishes" property="dishes"/>
-        <result column="image_path" property="imagePath"/>
+
 
     </resultMap>
 
