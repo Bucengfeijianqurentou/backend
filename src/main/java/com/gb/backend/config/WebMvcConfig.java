@@ -1,8 +1,10 @@
 package com.gb.backend.config;
 
+import com.gb.backend.config.converter.StringToMealTypeConverter;
 import com.gb.backend.interceptor.JwtInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -13,9 +15,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  */
 @Configuration
 @RequiredArgsConstructor
-public class WebConfig implements WebMvcConfigurer {
+public class WebMvcConfig implements WebMvcConfigurer {
 
     private final JwtInterceptor jwtInterceptor;
+    private final StringToMealTypeConverter stringToMealTypeConverter;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
@@ -28,5 +31,14 @@ public class WebConfig implements WebMvcConfigurer {
                         "/swagger-ui/**",
                         "/v3/api-docs/**"
                 );
+    }
+    
+    /**
+     * 添加自定义转换器，支持字符串到枚举的自动转换
+     */
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+        // 添加自定义的字符串到餐次类型转换器
+        registry.addConverter(stringToMealTypeConverter);
     }
 } 
