@@ -12,7 +12,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
+import java.util.ArrayList;
 
 /**
  * 食品加工管理控制器
@@ -235,5 +237,40 @@ public class ProcessingController {
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime startTime,
             @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime endTime) {
         return Result.success(processingService.calculateHygieneConditionDistribution(startTime, endTime));
+    }
+
+    /**
+     * 获取所有加工记录（不分页）
+     * @return 所有加工记录列表
+     */
+    @GetMapping("/all")
+    public Result<List<Processing>> listAll() {
+        List<Processing> processingList = processingService.list();
+        return Result.success(processingList);
+    }
+
+    /**
+     * 根据ID列表获取加工记录
+     * @param ids ID列表，逗号分隔的字符串
+     * @return 加工记录列表
+     */
+    @GetMapping("/ids")
+    public Result<List<Processing>> getByIds(@RequestParam String ids) {
+        if (ids == null || ids.trim().isEmpty()) {
+            return Result.error("ID列表不能为空");
+        }
+        
+        try {
+            String[] idArray = ids.split(",");
+            List<Integer> idList = new ArrayList<>();
+            for (String id : idArray) {
+                idList.add(Integer.parseInt(id.trim()));
+            }
+            
+            List<Processing> processingList = processingService.listByIds(idList);
+            return Result.success(processingList);
+        } catch (NumberFormatException e) {
+            return Result.error("ID格式不正确");
+        }
     }
 } 

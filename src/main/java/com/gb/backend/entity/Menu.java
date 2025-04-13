@@ -59,4 +59,9 @@ public class Menu {
      * 菜单图片路径
      */
     private String imagePath;
+    
+    /**
+     * 加工ID列表，字符串形式，多个ID使用逗号分隔
+     */
+    private String processIds;
 } 
