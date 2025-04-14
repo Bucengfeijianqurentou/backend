@@ -71,16 +71,7 @@ public class InspectionController {
         return inspectionService.findByResult(result, page, size);
     }
 
-    /**
-     * 根据批次号查询检查记录
-     */
-    @GetMapping("/batch/{batchNumber}")
-    public Page<Inspection> getByBatchNumber(
-            @PathVariable String batchNumber,
-            @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        return inspectionService.findByBatchNumber(batchNumber, page, size);
-    }
+
 
     /**
      * 根据菜单ID查询检查记录

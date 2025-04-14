@@ -153,4 +153,41 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
         
         return list(queryWrapper);
     }
+
+
+    @Override
+    public Page<Menu> listMenusByDateRangeAndMealTypeAndStatus(Integer page, Integer size,
+                                                               LocalDate startDate,
+                                                               LocalDate endDate,
+                                                               MealType mealType,
+                                                               String status) {
+        Page<Menu> pageParam = new Page<>(page, size);
+        LambdaQueryWrapper<Menu> queryWrapper = new LambdaQueryWrapper<>();
+
+        // 添加日期范围条件
+        if (startDate != null && endDate != null) {
+            queryWrapper.between(Menu::getMenuDate, startDate, endDate);
+        } else if (startDate != null) {
+            queryWrapper.ge(Menu::getMenuDate, startDate);
+        } else if (endDate != null) {
+            queryWrapper.le(Menu::getMenuDate, endDate);
+        }
+
+        // 添加餐次类型条件
+        if (mealType != null) {
+            queryWrapper.eq(Menu::getMealType, mealType);
+        }
+
+        // 添加状态条件
+        if (status != null && !status.isEmpty()) {
+            com.gb.backend.common.enums.MenuStatus menuStatus = com.gb.backend.common.enums.MenuStatus.fromCode(status);
+            if (menuStatus != null) {
+                queryWrapper.eq(Menu::getStatus, menuStatus);
+            }
+        }
+
+        queryWrapper.orderByDesc(Menu::getMenuDate);
+
+        return page(pageParam, queryWrapper);
+    }
 } 

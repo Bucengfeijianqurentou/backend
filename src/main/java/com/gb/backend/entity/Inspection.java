@@ -51,10 +51,6 @@ public class Inspection {
      */
     private String suggestions;
 
-    /**
-     * 批次号
-     */
-    private String batchNumber;
 
     /**
      * 菜单ID

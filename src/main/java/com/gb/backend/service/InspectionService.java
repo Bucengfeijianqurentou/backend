@@ -38,14 +38,7 @@ public interface InspectionService extends IService<Inspection> {
      */
     Page<Inspection> findByResult(InspectionResult result, int page, int size);
 
-    /**
-     * 根据批次号查询检查记录
-     * @param batchNumber 批次号
-     * @param page 页码
-     * @param size 每页大小
-     * @return 分页后的检查记录
-     */
-    Page<Inspection> findByBatchNumber(String batchNumber, int page, int size);
+
 
     /**
      * 根据菜单ID查询检查记录

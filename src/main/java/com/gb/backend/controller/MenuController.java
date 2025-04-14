@@ -112,6 +112,7 @@ public class MenuController {
      * @param startDate 开始日期
      * @param endDate 结束日期
      * @param mealType 餐次类型（可选）
+     * @param status
      * @return 菜单分页列表
      */
     @GetMapping("/search")
@@ -120,8 +121,9 @@ public class MenuController {
             @RequestParam(defaultValue = "10") Integer size,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
-            @RequestParam(required = false) MealType mealType) {
-        Page<Menu> menuPage = menuService.listMenusByDateRangeAndMealType(page, size, startDate, endDate, mealType);
+            @RequestParam(required = false) MealType mealType,
+            @RequestParam(required = false) String status) {
+        Page<Menu> menuPage = menuService.listMenusByDateRangeAndMealTypeAndStatus(page, size, startDate, endDate, mealType, status);
         return Result.success(menuPage);
     }
 

@@ -104,5 +104,23 @@ public interface MenuService extends IService<Menu> {
      * @return 菜单列表
      */
     List<Menu> getMenusByDate(LocalDate date);
+
+
+    /**
+     * 根据日期范围、餐次类型和状态查询菜单
+     *
+     * @param page 页码
+     * @param size 每页记录数
+     * @param startDate 开始日期
+     * @param endDate 结束日期
+     * @param mealType 餐次类型
+     * @param status 菜单状态
+     * @return 菜单分页列表
+     */
+    Page<Menu> listMenusByDateRangeAndMealTypeAndStatus(Integer page, Integer size,
+                                                        LocalDate startDate,
+                                                        LocalDate endDate,
+                                                        MealType mealType,
+                                                        String status);
     
 } 

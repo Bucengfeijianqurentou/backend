@@ -43,13 +43,6 @@ public class InspectionServiceImpl extends ServiceImpl<InspectionMapper, Inspect
                         .orderByDesc(Inspection::getInspectionTime));
     }
 
-    @Override
-    public Page<Inspection> findByBatchNumber(String batchNumber, int page, int size) {
-        return page(new Page<>(page, size),
-                new LambdaQueryWrapper<Inspection>()
-                        .eq(Inspection::getBatchNumber, batchNumber)
-                        .orderByDesc(Inspection::getInspectionTime));
-    }
 
     @Override
     public Page<Inspection> findByMenuId(Integer menuId, int page, int size) {
