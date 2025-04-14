@@ -56,4 +56,9 @@ public class Inspection {
      * 菜单ID
      */
     private Integer menuId;
+    
+    /**
+     * 监察凭证图片路径
+     */
+    private String imagePath;
 } 
