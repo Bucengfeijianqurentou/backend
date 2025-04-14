@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.gb.backend.mapper.TracingMapper">
+
+    <!-- 根据日期、餐次和菜品名称查询菜单 -->
+    <select id="findMenuByDateAndMealTypeAndDish" resultType="com.gb.backend.entity.Menu">
+        SELECT *
+        FROM menus
+        WHERE menu_date = #{date}
+        AND meal_type = #{mealType}
+        AND dishes LIKE CONCAT('%', #{dishName}, '%')
+        LIMIT 1
+    </select>
+    
+    <!-- 根据ID列表查询加工记录 -->
+    <select id="findProcessingsByIds" resultType="com.gb.backend.entity.Processing">
+        SELECT *
+        FROM processings
+        WHERE id IN
+        <foreach item="id" collection="processIds" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+    
+    <!-- 根据批次号查询采购记录 -->
+    <select id="findPurchaseByBatchNumber" resultType="com.gb.backend.entity.Purchase">
+        SELECT *
+        FROM purchases
+        WHERE batch_number = #{batchNumber}
+        LIMIT 1
+    </select>
+    
+    <!-- 根据菜单ID查询检查记录 -->
+    <select id="findInspectionByMenuId" resultType="com.gb.backend.entity.Inspection">
+        SELECT *
+        FROM inspections
+        WHERE menu_id = #{menuId}
+        LIMIT 1
+    </select>
+    
+</mapper> 
