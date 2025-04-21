@@ -8,6 +8,10 @@ spring:
     username: root
     password: 123456
   
+  # 导入额外配置文件
+  config:
+    import: classpath:chain.yml
+  
   # Jackson日期格式配置
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss

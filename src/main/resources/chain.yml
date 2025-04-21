@@ -1,0 +1,22 @@
+# 区块链配置
+chain:
+  # 基础URL
+  base-url: http://192.168.140.150:5002
+  
+  # 地址配置
+  address:
+    admin: 0xd32230e205601544e9ef602f7e664007694cd201
+    contract: 0x52dc2b120614cda96e83b87b84e4cbe6a550b1b0
+  
+  # API URL配置
+  api:
+    contract: ${chain.base-url}/WeBASE-Front/trans/handle
+    chain-number: ${chain.base-url}/WeBASE-Front/1/web3/transaction-total
+    node-manage: ${chain.base-url}/WeBASE-Front/precompiled/consensus/list?groupId=1&pageSize=100&pageNumber=1
+    private-key: ${chain.base-url}/WeBASE-Front/privateKey?type=0&userName=
+    block-number: ${chain.base-url}/WeBASE-Front/1/web3/blockNumber
+  
+  # 合约ABI
+  contract:
+    canteen-supervision-abi: |
+      [{"constant":false,"inputs":[{"name":"_id","type":"uint256"},{"name":"_data","type":"string"}],"name":"addFoodInfo","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"name":"_id","type":"uint256"}],"name":"getFoodTraceInfo","outputs":[{"name":"","type":"string[]"}],"payable":false,"stateMutability":"view","type":"function"}] 
