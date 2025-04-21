@@ -13,6 +13,7 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -30,6 +31,7 @@ import java.util.Map;
  */
 @Aspect
 @Component
+@Order(1) // 设置切面优先级，确保在事务等其他切面之前执行
 public class RequestLoggingAspect {
 
     private static final Logger logger = LoggerFactory.getLogger(RequestLoggingAspect.class);
@@ -41,8 +43,9 @@ public class RequestLoggingAspect {
 
     /**
      * 定义切入点，匹配所有Controller类中的方法
+     * 修改切点表达式，使其更加准确地匹配所有控制器
      */
-    @Pointcut("execution(* com.gb.backend.*.controller.*.*(..))")
+    @Pointcut("within(@org.springframework.web.bind.annotation.RestController *) || within(@org.springframework.stereotype.Controller *)")
     public void controllerMethods() {}
 
     /**
