@@ -45,7 +45,7 @@ public class JwtUtil {
      */
     public String generateToken(User user) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("id", user.getId());
+        claims.put("userId", user.getId());
         claims.put("username", user.getUsername());
         claims.put("role", user.getRole());
         
@@ -105,7 +105,7 @@ public class JwtUtil {
      * @param token token字符串
      * @return Claims对象
      */
-    private Claims getClaimsFromToken(String token) {
+    public Claims getClaimsFromToken(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(getSecretKey())
                 .build()
