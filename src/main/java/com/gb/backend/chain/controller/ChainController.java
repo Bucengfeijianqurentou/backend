@@ -36,6 +36,11 @@ public class ChainController {
         return weBASEService.registerChainCount(username);
     }
 
+
+    /**
+     * 获取交易总数
+     * @return
+     */
     @GetMapping("/getTransactionTotal")
     public Integer getTransactionTotal(){
         String res = HttpUtil.get(chainConstants.CHAIN_NUMBER_URL);
@@ -43,6 +48,11 @@ public class ChainController {
         return obj.getInt("txSum");
     }
 
+
+    /**
+     * 获取区块高度
+     * @return
+     */
     @GetMapping("/getBlockNumber")
     public Integer getBlockNumber(){
         String res = HttpUtil.get(chainConstants.BLOCK_NUMBER);
