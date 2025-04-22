@@ -61,4 +61,10 @@ public class Inspection {
      * 监察凭证图片路径
      */
     private String imagePath;
+
+
+    /**
+     * 交易哈希
+     */
+    private String transactionHash;
 } 

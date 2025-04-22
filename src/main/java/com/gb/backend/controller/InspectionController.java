@@ -1,6 +1,7 @@
 package com.gb.backend.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.gb.backend.chain.service.WeBASEService;
 import com.gb.backend.entity.Inspection;
 import com.gb.backend.service.InspectionService;
 import com.gb.backend.common.enums.InspectionResult;
@@ -99,6 +100,11 @@ public class InspectionController {
      */
     @PostMapping
     public boolean save(@RequestBody Inspection inspection) {
+        try {
+            inspection.setTransactionHash(WeBASEService.generateTransactionHash());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
         return inspectionService.save(inspection);
     }
 
