@@ -3,6 +3,7 @@ package com.gb.backend.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.gb.backend.chain.service.WeBASEService;
 import com.gb.backend.entity.Menu;
 import com.gb.backend.mapper.MenuMapper;
 import com.gb.backend.service.MenuService;
@@ -29,7 +30,12 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
             // 同一天同一餐次已存在菜单
             return false;
         }
-        
+        try {
+            menu.setTransactionHash(WeBASEService.generateTransactionHash());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
         return save(menu);
     }
 

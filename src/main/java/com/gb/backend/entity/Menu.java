@@ -64,4 +64,9 @@ public class Menu {
      * 加工ID列表，字符串形式，多个ID使用逗号分隔
      */
     private String processIds;
+
+    /**
+     * 交易哈希
+     */
+    private String transactionHash;
 } 
