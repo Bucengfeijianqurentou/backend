@@ -2,6 +2,7 @@ package com.gb.backend.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.gb.backend.chain.service.WeBASEService;
 import com.gb.backend.common.constant.ErrorMessage;
 import com.gb.backend.common.exception.BusinessException;
 import com.gb.backend.entity.dto.UserLoginDTO;
@@ -9,6 +10,7 @@ import com.gb.backend.entity.dto.UserRegisterDTO;
 import com.gb.backend.entity.User;
 import com.gb.backend.mapper.UserMapper;
 import com.gb.backend.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
@@ -20,8 +22,11 @@ import org.springframework.util.DigestUtils;
  * @author Claude
  * @since 2024-04-08
  */
+@RequiredArgsConstructor
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
+
+    private final WeBASEService weBASEService;
     
     /**
      * 根据用户名查询用户
@@ -59,6 +64,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if (user == null) {
             throw new BusinessException(ErrorMessage.USERNAME_PASSWORD_ROLE_ERROR);
         }
+
+        if (user.getStatus() == 1) {
+            throw new BusinessException(ErrorMessage.STATUS_ERROR);
+        }
         return user;
     }
 
@@ -90,7 +99,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         
         // 加密密码
         user.setPassword(DigestUtils.md5DigestAsHex(registerDTO.getPassword().getBytes()));
-        
+
+        //注册区块链账户
+        String address = weBASEService.registerChainCount(user.getUsername());
+        user.setChainAccount(address);
+
+        //设置默认状态：1（待审核）
+        user.setStatus(1);
+
         // 保存用户
         this.save(user);
         return user;

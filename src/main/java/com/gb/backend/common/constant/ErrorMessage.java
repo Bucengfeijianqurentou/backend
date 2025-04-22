@@ -19,4 +19,6 @@ public interface ErrorMessage {
 
     /** 系统错误提示 */
     String SYSTEM_ERROR = "系统错误";
+
+    String STATUS_ERROR = "用户待审核或处于禁用状态，请联系管理员";
 } 

@@ -57,9 +57,10 @@ public class UserController {
      * @return 分页用户数据
      */
     @GetMapping
-    public Page<User> list(@RequestParam(defaultValue = "1") int page,
+    public Result<Page<User>> list(@RequestParam(defaultValue = "1") int page,
                           @RequestParam(defaultValue = "10") int size) {
-        return userService.page(new Page<>(page, size));
+        Page<User> userPage = userService.page(new Page<>(page, size));
+        return Result.success(userPage);
     }
 
     /**
@@ -69,8 +70,9 @@ public class UserController {
      * @return 用户信息
      */
     @GetMapping("/{id}")
-    public User getById(@PathVariable Integer id) {
-        return userService.getById(id);
+    public Result<User> getById(@PathVariable Integer id) {
+        User user = userService.getById(id);
+        return Result.success(user);
     }
 
     /**
@@ -80,8 +82,9 @@ public class UserController {
      * @return 是否成功
      */
     @PostMapping
-    public boolean save(@RequestBody User user) {
-        return userService.save(user);
+    public Result<Boolean> save(@RequestBody User user) {
+        boolean result = userService.save(user);
+        return Result.success(result);
     }
 
     /**
@@ -92,9 +95,10 @@ public class UserController {
      * @return 是否成功
      */
     @PutMapping("/{id}")
-    public boolean update(@PathVariable Integer id, @RequestBody User user) {
+    public Result<Boolean> update(@PathVariable Integer id, @RequestBody User user) {
         user.setId(id);
-        return userService.updateById(user);
+        boolean result = userService.updateById(user);
+        return Result.success(result);
     }
 
     /**
@@ -104,8 +108,9 @@ public class UserController {
      * @return 是否成功
      */
     @DeleteMapping("/{id}")
-    public boolean delete(@PathVariable Integer id) {
-        return userService.removeById(id);
+    public Result<Boolean> delete(@PathVariable Integer id) {
+        boolean result = userService.removeById(id);
+        return Result.success(result);
     }
 
     /**
@@ -115,8 +120,9 @@ public class UserController {
      * @return 用户信息
      */
     @GetMapping("/username/{username}")
-    public User getByUsername(@PathVariable String username) {
-        return userService.findByUsername(username);
+    public Result<User> getByUsername(@PathVariable String username) {
+        User user = userService.findByUsername(username);
+        return Result.success(user);
     }
 
     /**
@@ -129,5 +135,23 @@ public class UserController {
         String username = jwtUtil.getCurrentUsername();
         User user = userService.findByUsername(username);
         return Result.success(user);
+    }
+    
+    /**
+     * 切换用户状态（启用/禁用）
+     * @param id 用户ID
+     * @param status 目标状态：0-启用，1-禁用
+     * @return 是否成功
+     */
+    @PutMapping("/{id}/status/{status}")
+    public Result<Boolean> toggleStatus(@PathVariable Integer id, @PathVariable Integer status) {
+        User user = userService.getById(id);
+        if (user == null) {
+            return Result.error(404, "用户不存在");
+        }
+        
+        user.setStatus(status);
+        boolean result = userService.updateById(user);
+        return Result.success(result);
     }
 } 

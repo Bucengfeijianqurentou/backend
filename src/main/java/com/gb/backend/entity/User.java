@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 /**
  * 用户实体类
  *
- * @author Claude
  * @since 2024-04-08
  */
 @Data
@@ -28,6 +27,10 @@ public class User {
     private String email;
 
     private String realName;
+
+    private String chainAccount;
+
+    private Integer status;
     
     @TableField(fill = FieldFill.INSERT)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")

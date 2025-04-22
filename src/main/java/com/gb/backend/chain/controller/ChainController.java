@@ -5,6 +5,7 @@ import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import com.gb.backend.annotation.PassToken;
 import com.gb.backend.chain.constants.ChainConstants;
+import com.gb.backend.chain.service.WeBASEService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,6 +19,9 @@ public class ChainController {
     private final ChainConstants chainConstants;
 
     @Autowired
+    private  WeBASEService weBASEService;
+
+    @Autowired
     public ChainController(ChainConstants chainConstants) {
         this.chainConstants = chainConstants;
     }
@@ -29,11 +33,7 @@ public class ChainController {
      */
     @GetMapping("/register")
     public String registerChainCount(String username) {
-        String url = chainConstants.PRIVATE_KEY_URL + username;
-        String result = HttpUtil.get(url);
-        JSONObject jsonObject = JSONUtil.parseObj(result);
-        String address = jsonObject.getStr("address");
-        return address;
+        return weBASEService.registerChainCount(username);
     }
 
     @GetMapping("/getTransactionTotal")
