@@ -64,6 +64,12 @@ public class Processing {
     private HygieneCondition hygieneCondition;
 
     /**
+     * 交易哈希
+     */
+    private String transactionHash;
+
+
+    /**
      * 图片路径
      */
     private String imagePath;

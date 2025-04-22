@@ -61,6 +61,7 @@ public class PurchaseController {
         inventory.setBatchNumber(purchaseRequestDTO.getBatchNumber());
         inventory.setTotalQuantity(purchaseRequestDTO.getQuantity());
         inventory.setRemainingQuantity(purchaseRequestDTO.getQuantity());
+        inventory.setTransactionHash(WeBASEService.generateTransactionHash());
         
         inventoryService.save(inventory);
         

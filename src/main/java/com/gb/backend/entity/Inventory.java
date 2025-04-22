@@ -36,4 +36,9 @@ public class Inventory {
      * 当前库存数量（剩余数量）
      */
     private Integer remainingQuantity;
+
+    /**
+     * 交易哈希
+     */
+    private String transactionHash;
 } 

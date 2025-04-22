@@ -1,6 +1,7 @@
 package com.gb.backend.aspect;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.gb.backend.annotation.PassToken;
 import com.gb.backend.util.JwtUtil;
 import io.jsonwebtoken.Claims;
@@ -37,6 +38,12 @@ public class RequestLoggingAspect {
     private static final Logger logger = LoggerFactory.getLogger(RequestLoggingAspect.class);
     private static final ObjectMapper objectMapper = new ObjectMapper();
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
+
+    public RequestLoggingAspect() {
+        // 注册 JavaTimeModule 以支持 LocalDate 等类型
+        objectMapper.registerModule(new JavaTimeModule());
+    }
+
 
     @Autowired
     private JwtUtil jwtUtil;

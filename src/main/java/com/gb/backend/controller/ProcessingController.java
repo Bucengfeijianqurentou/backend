@@ -1,6 +1,7 @@
 package com.gb.backend.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.gb.backend.chain.service.WeBASEService;
 import com.gb.backend.common.Result;
 import com.gb.backend.common.enums.HygieneCondition;
 import com.gb.backend.entity.Processing;
@@ -34,7 +35,7 @@ public class ProcessingController {
      */
     @PostMapping("/create")
     @Transactional
-    public Result<Processing> create(@RequestBody Processing processing) {
+    public Result<Processing> create(@RequestBody Processing processing) throws Exception {
         // 验证加工数量不为空且大于0
         if (processing.getQuantity() == null || processing.getQuantity() <= 0) {
             return Result.error("加工数量必须大于0");
@@ -72,6 +73,7 @@ public class ProcessingController {
         }
         
         // 保存加工记录
+        processing.setTransactionHash(WeBASEService.generateTransactionHash());
         processingService.save(processing);
         
         // 更新库存数量
