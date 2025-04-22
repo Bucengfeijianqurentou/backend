@@ -57,10 +57,9 @@ public class UserController {
      * @return 分页用户数据
      */
     @GetMapping
-    public Result<Page<User>> list(@RequestParam(defaultValue = "1") int page,
+    public Page<User> list(@RequestParam(defaultValue = "1") int page,
                           @RequestParam(defaultValue = "10") int size) {
-        Page<User> userPage = userService.page(new Page<>(page, size));
-        return Result.success(userPage);
+        return userService.page(new Page<>(page, size));
     }
 
     /**
@@ -70,9 +69,8 @@ public class UserController {
      * @return 用户信息
      */
     @GetMapping("/{id}")
-    public Result<User> getById(@PathVariable Integer id) {
-        User user = userService.getById(id);
-        return Result.success(user);
+    public User getById(@PathVariable Integer id) {
+        return userService.getById(id);
     }
 
     /**
@@ -82,9 +80,8 @@ public class UserController {
      * @return 是否成功
      */
     @PostMapping
-    public Result<Boolean> save(@RequestBody User user) {
-        boolean result = userService.save(user);
-        return Result.success(result);
+    public boolean save(@RequestBody User user) {
+        return userService.save(user);
     }
 
     /**
@@ -95,10 +92,9 @@ public class UserController {
      * @return 是否成功
      */
     @PutMapping("/{id}")
-    public Result<Boolean> update(@PathVariable Integer id, @RequestBody User user) {
+    public boolean update(@PathVariable Integer id, @RequestBody User user) {
         user.setId(id);
-        boolean result = userService.updateById(user);
-        return Result.success(result);
+        return userService.updateById(user);
     }
 
     /**
@@ -108,9 +104,9 @@ public class UserController {
      * @return 是否成功
      */
     @DeleteMapping("/{id}")
-    public Result<Boolean> delete(@PathVariable Integer id) {
-        boolean result = userService.removeById(id);
-        return Result.success(result);
+    public boolean delete(@PathVariable Integer id) {
+        return userService.removeById(id);
+
     }
 
     /**
@@ -120,9 +116,8 @@ public class UserController {
      * @return 用户信息
      */
     @GetMapping("/username/{username}")
-    public Result<User> getByUsername(@PathVariable String username) {
-        User user = userService.findByUsername(username);
-        return Result.success(user);
+    public User getByUsername(@PathVariable String username) {
+        return userService.findByUsername(username);
     }
 
     /**

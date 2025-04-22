@@ -59,6 +59,11 @@ public class Purchase {
     private String purchaserId;
 
     /**
+     * 交易哈希
+     */
+    private String transactionHash;
+
+    /**
      * 采购相关图片路径
      */
     private String imagePath;

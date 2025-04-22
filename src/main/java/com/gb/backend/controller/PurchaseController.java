@@ -1,6 +1,7 @@
 package com.gb.backend.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.gb.backend.chain.service.WeBASEService;
 import com.gb.backend.common.Result;
 import com.gb.backend.entity.Food;
 import com.gb.backend.entity.Inventory;
@@ -37,7 +38,7 @@ public class PurchaseController {
      */
     @PostMapping("/create")
     @Transactional
-    public Result<Purchase> createWithFoodAndInventory(@RequestBody PurchaseRequestDTO purchaseRequestDTO) {
+    public Result<Purchase> createWithFoodAndInventory(@RequestBody PurchaseRequestDTO purchaseRequestDTO) throws Exception {
         Integer foodId;
         System.out.println(purchaseRequestDTO);
         // 1. 创建新食品记录
@@ -51,6 +52,7 @@ public class PurchaseController {
         Purchase purchase = new Purchase();
         BeanUtils.copyProperties(purchaseRequestDTO, purchase);
         purchase.setPurchaserId(purchaseRequestDTO.getPurchaserId());
+        purchase.setTransactionHash(WeBASEService.generateTransactionHash());
         purchaseService.save(purchase);
         
         // 3. 创建库存记录
