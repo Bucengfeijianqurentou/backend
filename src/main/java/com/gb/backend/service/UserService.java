@@ -10,4 +10,10 @@ public interface UserService extends IService<User> {
     User findByUsername(String username);
     User login(UserLoginDTO loginDTO);
     User register(UserRegisterDTO registerDTO);
+    
+    /**
+     * 获取系统用户总数
+     * @return 用户总数
+     */
+    int getUserCount();
 } 

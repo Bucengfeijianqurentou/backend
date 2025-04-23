@@ -111,4 +111,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         this.save(user);
         return user;
     }
+    
+    /**
+     * 获取系统用户总数
+     * @return 用户总数
+     */
+    @Override
+    public int getUserCount() {
+        return Math.toIntExact(this.count());
+    }
 } 

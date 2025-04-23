@@ -11,6 +11,9 @@ import com.gb.backend.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 用户控制器
  * 处理用户相关的请求，包括登录、注册、查询、修改等操作
@@ -148,5 +151,17 @@ public class UserController {
         user.setStatus(status);
         boolean result = userService.updateById(user);
         return Result.success(result);
+    }
+    
+    /**
+     * 获取系统用户总数
+     * @return 用户总数
+     */
+    @GetMapping("/count")
+    public Result<Map<String, Object>> getUserCount() {
+        int count = userService.getUserCount();
+        Map<String, Object> data = new HashMap<>();
+        data.put("count", count);
+        return Result.success(data);
     }
 } 
