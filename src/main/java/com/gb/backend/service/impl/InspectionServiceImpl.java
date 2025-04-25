@@ -63,4 +63,10 @@ public class InspectionServiceImpl extends ServiceImpl<InspectionMapper, Inspect
                         Collectors.counting()
                 ));
     }
+
+    @Override
+    public Inspection getByMenuId(Integer id) {
+        return this.getOne(new LambdaQueryWrapper<Inspection>()
+                .eq(Inspection::getMenuId, id));
+    }
 }

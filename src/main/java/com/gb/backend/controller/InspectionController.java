@@ -1,7 +1,9 @@
 package com.gb.backend.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.gb.backend.annotation.PassToken;
 import com.gb.backend.chain.service.WeBASEService;
+import com.gb.backend.common.Result;
 import com.gb.backend.entity.Inspection;
 import com.gb.backend.service.InspectionService;
 import com.gb.backend.common.enums.InspectionResult;
@@ -14,6 +16,7 @@ import java.util.Map;
 /**
  * 监管检查管理控制器
  */
+@PassToken
 @RestController
 @RequestMapping("/api/inspections")
 @RequiredArgsConstructor
@@ -71,6 +74,16 @@ public class InspectionController {
             @RequestParam(defaultValue = "10") int size) {
         return inspectionService.findByResult(result, page, size);
     }
+
+    /**
+     * 根据菜单id查询检查记录
+     */
+    @GetMapping("/detail/{id}")
+    public Result<Inspection> getByMenuId(@PathVariable("id") Integer id){
+        Inspection inspection = inspectionService.getByMenuId(id);
+        return Result.success(inspection);
+    }
+
 
 
 

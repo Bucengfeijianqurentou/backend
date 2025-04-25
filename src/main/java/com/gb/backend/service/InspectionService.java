@@ -56,4 +56,13 @@ public interface InspectionService extends IService<Inspection> {
      * @return 各检查结果的数量统计
      */
     java.util.Map<InspectionResult, Long> calculateResultDistribution(LocalDateTime startTime, LocalDateTime endTime);
-} 
+
+
+    /**
+     * 根据菜单id查询检查记录
+     *
+     * @param id
+     * @return
+     */
+    Inspection getByMenuId(Integer id);
+}

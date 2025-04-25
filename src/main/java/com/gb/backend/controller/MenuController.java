@@ -1,6 +1,7 @@
 package com.gb.backend.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.gb.backend.annotation.PassToken;
 import com.gb.backend.common.Result;
 import com.gb.backend.common.enums.MealType;
 import com.gb.backend.common.enums.MenuStatus;
@@ -19,6 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/menu")
 @RequiredArgsConstructor
+@PassToken
 public class MenuController {
     
     private final MenuService menuService;
