@@ -1,7 +1,7 @@
 # 区块链配置
 chain:
   # 基础URL
-  base-url: http://192.168.140.149:5002
+  base-url: http://192.168.109.150:5002
   
   # 地址配置
   address:

@@ -29,6 +29,11 @@ public class PurchaseRequestDTO {
     private Integer quantity;
 
     /**
+     * 规格
+     */
+    private String specification;
+
+    /**
      * 生产日期
      */
     private LocalDate productionDate;

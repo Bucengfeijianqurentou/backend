@@ -38,6 +38,12 @@ public class Purchase {
      */
     private Integer quantity;
 
+
+    /**
+     * 规格
+     */
+    private String specification;
+
     /**
      * 生产日期
      */
