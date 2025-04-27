@@ -1,8 +1,10 @@
 package com.gb.backend.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.gb.backend.annotation.PassToken;
 import com.gb.backend.entity.Feedback;
 import com.gb.backend.service.FeedbackService;
+import com.gb.backend.common.Result;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
@@ -15,137 +17,112 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/feedbacks")
 @RequiredArgsConstructor
+@PassToken
 public class FeedbackController {
     
     private final FeedbackService feedbackService;
 
     /**
-     * 分页查询反馈记录
+     * 分页获取反馈列表
+     * @param current 当前页
+     * @param size 每页记录数
+     * @return 分页数据
      */
-    @GetMapping
-    public Page<Feedback> list(@RequestParam(defaultValue = "1") int page,
-                             @RequestParam(defaultValue = "10") int size) {
-        return feedbackService.page(new Page<>(page, size));
+    @GetMapping("/page")
+    public Result<Page<Feedback>> pageFeedbacks(
+            @RequestParam(defaultValue = "1") long current,
+            @RequestParam(defaultValue = "10") long size) {
+        return Result.success(feedbackService.pageFeedbacks(current, size));
     }
 
     /**
-     * 根据ID查询反馈记录
-     */
-    @GetMapping("/{id}")
-    public Feedback getById(@PathVariable Integer id) {
-        return feedbackService.getById(id);
-    }
-
-    /**
-     * 根据用户ID查询反馈记录
+     * 根据用户ID获取反馈
+     * @param userId 用户ID
+     * @param current 当前页
+     * @param size 每页记录数
+     * @return 分页数据
      */
     @GetMapping("/user/{userId}")
-    public Page<Feedback> getByUserId(
+    public Result<Page<Feedback>> getFeedbacksByUserId(
             @PathVariable Integer userId,
-            @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        return feedbackService.findByUserId(userId, page, size);
+            @RequestParam(defaultValue = "1") long current,
+            @RequestParam(defaultValue = "10") long size) {
+        return Result.success(feedbackService.getFeedbacksByUserId(userId, current, size));
     }
 
     /**
-     * 根据日期范围查询反馈记录
+     * 根据日期范围获取反馈
+     * @param startDate 开始日期
+     * @param endDate 结束日期
+     * @param current 当前页
+     * @param size 每页记录数
+     * @return 分页数据
      */
     @GetMapping("/date-range")
-    public Page<Feedback> getByDateRange(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
-            @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        return feedbackService.findByDateRange(startDate, endDate, page, size);
+    public Result<Page<Feedback>> getFeedbacksByDateRange(
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
+            @RequestParam(defaultValue = "1") long current,
+            @RequestParam(defaultValue = "10") long size) {
+        return Result.success(feedbackService.getFeedbacksByDateRange(startDate, endDate, current, size));
     }
 
     /**
-     * 根据菜单ID查询反馈记录
+     * 获取反馈统计数据
+     * @return 统计数据
      */
-    @GetMapping("/menu/{menuId}")
-    public Page<Feedback> getByMenuId(
-            @PathVariable Integer menuId,
-            @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        return feedbackService.findByMenuId(menuId, page, size);
+    @GetMapping("/statistics")
+    public Result<Map<String, Object>> getFeedbackStatistics() {
+        return Result.success(feedbackService.getFeedbackStatistics());
     }
 
     /**
-     * 根据批次号查询反馈记录
+     * 根据ID获取反馈
+     * @param id 反馈ID
+     * @return 反馈信息
      */
-    @GetMapping("/batch/{batchNumber}")
-    public Page<Feedback> getByBatchNumber(
-            @PathVariable String batchNumber,
-            @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        return feedbackService.findByBatchNumber(batchNumber, page, size);
+    @GetMapping("/{id}")
+    public Result<Feedback> getFeedbackById(@PathVariable Integer id) {
+        Feedback feedback = feedbackService.getById(id);
+        return feedback != null ? Result.success(feedback) : Result.error("反馈不存在");
     }
 
     /**
-     * 根据评分范围查询反馈记录
-     */
-    @GetMapping("/rating-range")
-    public Page<Feedback> getByRatingRange(
-            @RequestParam Integer minRating,
-            @RequestParam Integer maxRating,
-            @RequestParam(defaultValue = "1") int page,
-            @RequestParam(defaultValue = "10") int size) {
-        return feedbackService.findByRatingRange(minRating, maxRating, page, size);
-    }
-
-    /**
-     * 统计评分分布
-     */
-    @GetMapping("/statistics/rating-distribution")
-    public Map<Integer, Long> getRatingDistribution(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
-        return feedbackService.calculateRatingDistribution(startDate, endDate);
-    }
-
-    /**
-     * 获取平均评分
-     */
-    @GetMapping("/statistics/average-rating")
-    public Double getAverageRating(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate) {
-        return feedbackService.calculateAverageRating(startDate, endDate);
-    }
-
-    /**
-     * 获取热点反馈内容
-     */
-    @GetMapping("/statistics/hot-content")
-    public Map<String, Long> getHotContent(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate startDate,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate endDate,
-            @RequestParam(defaultValue = "10") int limit) {
-        return feedbackService.getHotFeedbackContent(startDate, endDate, limit);
-    }
-
-    /**
-     * 新增反馈记录
+     * 添加反馈
+     * @param feedback 反馈信息
+     * @return 操作结果
      */
     @PostMapping
-    public boolean save(@RequestBody Feedback feedback) {
-        return feedbackService.save(feedback);
+    public Result<Boolean> addFeedback(@RequestBody Feedback feedback) {
+        // 如果未设置反馈日期，则使用当前日期
+        if (feedback.getFeedbackDate() == null) {
+            feedback.setFeedbackDate(LocalDate.now());
+        }
+        boolean success = feedbackService.save(feedback);
+        return success ? Result.success(true) : Result.error("添加反馈失败");
     }
 
     /**
-     * 更新反馈记录
+     * 更新反馈
+     * @param id 反馈ID
+     * @param feedback 反馈信息
+     * @return 操作结果
      */
     @PutMapping("/{id}")
-    public boolean update(@PathVariable Integer id, @RequestBody Feedback feedback) {
+    public Result<Boolean> updateFeedback(@PathVariable Integer id, @RequestBody Feedback feedback) {
         feedback.setId(id);
-        return feedbackService.updateById(feedback);
+        boolean success = feedbackService.updateById(feedback);
+        return success ? Result.success(true) : Result.error("更新反馈失败");
     }
 
     /**
-     * 删除反馈记录
+     * 删除反馈
+     * @param id 反馈ID
+     * @return 操作结果
      */
     @DeleteMapping("/{id}")
-    public boolean delete(@PathVariable Integer id) {
-        return feedbackService.removeById(id);
+    public Result<Boolean> deleteFeedback(@PathVariable Integer id) {
+        boolean success = feedbackService.removeById(id);
+        return success ? Result.success(true) : Result.error("删除反馈失败");
     }
 } 

@@ -13,38 +13,23 @@ import java.time.LocalDate;
 @TableName("feedbacks")
 public class Feedback {
     /**
-     * 反馈ID
+     * 反馈ID，主键，自动递增
      */
-    @TableId(type = IdType.AUTO)
+    @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
-
+    
     /**
-     * 用户ID（学生/家长）
+     * 用户ID，外键，关联users表的id
      */
     private Integer userId;
-
+    
     /**
      * 反馈日期
      */
     private LocalDate feedbackDate;
-
+    
     /**
      * 反馈内容
      */
     private String content;
-
-    /**
-     * 评分（1-5）
-     */
-    private Integer rating;
-
-    /**
-     * 菜单ID
-     */
-    private Integer menuId;
-
-    /**
-     * 批次号
-     */
-    private String batchNumber;
 } 
