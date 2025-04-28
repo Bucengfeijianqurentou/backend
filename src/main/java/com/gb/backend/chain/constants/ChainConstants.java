@@ -16,7 +16,7 @@ public class ChainConstants {
     public final String ADMIN_ADDRESS;
     
     // 合约地址
-    public final String ASSET_MANAGEMENT_CONTRACT_ADDRESS;
+    public final String CONTRACT_ADDRESS;
     
     // 交易API
     public final String CONTRACT_URL;
@@ -43,7 +43,7 @@ public class ChainConstants {
     public ChainConstants(ChainProperties chainProperties) {
         this.URL = chainProperties.getBaseUrl();
         this.ADMIN_ADDRESS = chainProperties.getAddress().getAdmin();
-        this.ASSET_MANAGEMENT_CONTRACT_ADDRESS = chainProperties.getAddress().getContract();
+        this.CONTRACT_ADDRESS = chainProperties.getAddress().getContract();
         this.CONTRACT_URL = chainProperties.getApi().getContract();
         this.CHAIN_NUMBER_URL = chainProperties.getApi().getChainNumber();
         this.NODE_MANAGE_URL = chainProperties.getApi().getNodeManage();

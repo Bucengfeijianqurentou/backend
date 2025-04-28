@@ -1,6 +1,7 @@
 package com.gb.backend.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.gb.backend.annotation.DataOnChain;
 import com.gb.backend.annotation.PassToken;
 import com.gb.backend.entity.Feedback;
 import com.gb.backend.service.FeedbackService;
@@ -93,6 +94,7 @@ public class FeedbackController {
      * @return 操作结果
      */
     @PostMapping
+    @DataOnChain
     public Result<Boolean> addFeedback(@RequestBody Feedback feedback) {
         // 如果未设置反馈日期，则使用当前日期
         if (feedback.getFeedbackDate() == null) {

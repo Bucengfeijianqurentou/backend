@@ -1,6 +1,7 @@
 package com.gb.backend.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.gb.backend.annotation.DataOnChain;
 import com.gb.backend.chain.service.WeBASEService;
 import com.gb.backend.common.Result;
 import com.gb.backend.common.enums.HygieneCondition;
@@ -33,6 +34,7 @@ public class ProcessingController {
      * @param processing 加工记录信息
      * @return 创建结果
      */
+    @DataOnChain
     @PostMapping("/create")
     @Transactional
     public Result<Processing> create(@RequestBody Processing processing) throws Exception {

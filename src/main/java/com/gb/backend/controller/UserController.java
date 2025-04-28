@@ -1,6 +1,7 @@
 package com.gb.backend.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.gb.backend.annotation.DataOnChain;
 import com.gb.backend.common.Result;
 import com.gb.backend.entity.vo.UserLoginVO;
 import com.gb.backend.entity.User;
@@ -46,6 +47,7 @@ public class UserController {
      * @param registerDTO 注册参数
      * @return 注册成功的用户信息
      */
+    @DataOnChain
     @PostMapping("/register")
     public Result<User> register(@RequestBody UserRegisterDTO registerDTO) {
         User user = userService.register(registerDTO);

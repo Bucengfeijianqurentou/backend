@@ -1,6 +1,7 @@
 package com.gb.backend.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.gb.backend.annotation.DataOnChain;
 import com.gb.backend.annotation.PassToken;
 import com.gb.backend.common.Result;
 import com.gb.backend.entity.Distribution;
@@ -152,6 +153,7 @@ public class DistributionController {
      * @param distributeDTO 发放信息（菜单ID、发放对象列表、发放人姓名）
      * @return 创建结果
      */
+    @DataOnChain
     @PostMapping("/batch")
     public Result<Boolean> createDistribution(@RequestBody BatchDistributeDTO distributeDTO) {
         // 获取菜单ID

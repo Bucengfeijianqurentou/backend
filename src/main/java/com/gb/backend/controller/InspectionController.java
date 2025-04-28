@@ -1,6 +1,7 @@
 package com.gb.backend.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.gb.backend.annotation.DataOnChain;
 import com.gb.backend.annotation.PassToken;
 import com.gb.backend.chain.service.WeBASEService;
 import com.gb.backend.common.Result;
@@ -111,6 +112,7 @@ public class InspectionController {
     /**
      * 新增检查记录
      */
+    @DataOnChain
     @PostMapping
     public boolean save(@RequestBody Inspection inspection) {
         try {

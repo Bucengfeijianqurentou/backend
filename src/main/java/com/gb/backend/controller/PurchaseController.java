@@ -1,6 +1,7 @@
 package com.gb.backend.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.gb.backend.annotation.DataOnChain;
 import com.gb.backend.chain.service.WeBASEService;
 import com.gb.backend.common.Result;
 import com.gb.backend.entity.Food;
@@ -36,6 +37,7 @@ public class PurchaseController {
      * @param purchaseRequestDTO 采购请求DTO
      * @return 创建结果
      */
+    @DataOnChain
     @PostMapping("/create")
     @Transactional
     public Result<Purchase> createWithFoodAndInventory(@RequestBody PurchaseRequestDTO purchaseRequestDTO) throws Exception {

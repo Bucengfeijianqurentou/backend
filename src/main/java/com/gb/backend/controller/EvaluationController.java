@@ -1,6 +1,7 @@
 package com.gb.backend.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.gb.backend.annotation.DataOnChain;
 import com.gb.backend.annotation.PassToken;
 import com.gb.backend.common.Result;
 import com.gb.backend.entity.Evaluation;
@@ -116,6 +117,7 @@ public class EvaluationController {
     /**
      * 新增评价记录
      */
+    @DataOnChain
     @PostMapping
     public Result<Boolean> save(@RequestBody Evaluation evaluation) {
         // 设置提交时间为当前时间
