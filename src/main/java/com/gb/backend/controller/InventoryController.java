@@ -1,10 +1,16 @@
 package com.gb.backend.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.gb.backend.chain.service.WeBASEService;
 import com.gb.backend.common.Result;
+import com.gb.backend.entity.Food;
 import com.gb.backend.entity.Inventory;
+import com.gb.backend.entity.Purchase;
+import com.gb.backend.entity.dto.BatchNumberReqDTO;
 import com.gb.backend.entity.dto.InventoryDetailDTO;
+import com.gb.backend.service.FoodService;
 import com.gb.backend.service.InventoryService;
+import com.gb.backend.service.PurchaseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +25,34 @@ import java.util.List;
 public class InventoryController {
     
     private final InventoryService inventoryService;
+
+    private final PurchaseService purchaseService;
+
+    private final FoodService foodService;
+
+    /**
+     * 扫码入库
+     * @param batchNumber
+     * @return
+     * @throws Exception
+     */
+    @PostMapping("/scan")
+    public Result<Inventory> scanToStoreStock(@RequestBody BatchNumberReqDTO batchNumberReqDTO) throws Exception {
+        //根据批次号查询采购记录
+        Purchase byBatchNumber = purchaseService.findByBatchNumber(batchNumberReqDTO.getBatchNumber());
+        //根据食品名称查询食品记录
+        Food food = foodService.findByName(byBatchNumber.getName());
+        //创建库存记录
+        Inventory inventory = new Inventory();
+        inventory.setFoodId(food.getId());
+        inventory.setBatchNumber(byBatchNumber.getBatchNumber());
+        inventory.setTotalQuantity(byBatchNumber.getQuantity());
+        inventory.setRemainingQuantity(byBatchNumber.getQuantity());
+        inventory.setTransactionHash(WeBASEService.generateTransactionHash());
+        inventoryService.save(inventory);
+        return Result.success(inventory);
+    }
+
 
     /**
      * 创建库存记录

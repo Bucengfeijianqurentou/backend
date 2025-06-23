@@ -57,7 +57,7 @@ public class PurchaseController {
         purchase.setTransactionHash(WeBASEService.generateTransactionHash());
         purchaseService.save(purchase);
         
-        // 3. 创建库存记录
+        /*// 3. 创建库存记录
         Inventory inventory = new Inventory();
         inventory.setFoodId(foodId);
         inventory.setBatchNumber(purchaseRequestDTO.getBatchNumber());
@@ -65,7 +65,7 @@ public class PurchaseController {
         inventory.setRemainingQuantity(purchaseRequestDTO.getQuantity());
         inventory.setTransactionHash(WeBASEService.generateTransactionHash());
         
-        inventoryService.save(inventory);
+        inventoryService.save(inventory);*/
         
         return Result.success(purchase);
     }
