@@ -32,7 +32,7 @@ public class InventoryController {
 
     /**
      * 扫码入库
-     * @param BatchNumberReqDTO
+     * @param batchNumberReqDTO
      * @return
      * @throws Exception
      */
