@@ -20,7 +20,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/menu")
 @RequiredArgsConstructor
-@PassToken
 public class MenuController {
     
     private final MenuService menuService;

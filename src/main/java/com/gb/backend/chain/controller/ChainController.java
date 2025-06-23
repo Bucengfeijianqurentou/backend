@@ -53,6 +53,7 @@ public class ChainController {
      * 获取区块高度
      * @return
      */
+    @PassToken
     @GetMapping("/getBlockNumber")
     public Integer getBlockNumber(){
         String res = HttpUtil.get(chainConstants.BLOCK_NUMBER);

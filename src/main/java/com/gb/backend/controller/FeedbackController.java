@@ -94,7 +94,7 @@ public class FeedbackController {
      * @return 操作结果
      */
     @PostMapping
-    @DataOnChain
+    //@DataOnChain
     public Result<Boolean> addFeedback(@RequestBody Feedback feedback) {
         // 如果未设置反馈日期，则使用当前日期
         if (feedback.getFeedbackDate() == null) {

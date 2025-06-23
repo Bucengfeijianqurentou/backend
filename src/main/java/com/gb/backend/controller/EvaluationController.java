@@ -19,6 +19,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/evaluations")
 @RequiredArgsConstructor
+@PassToken
 public class EvaluationController {
 
     private final EvaluationService evaluationService;
@@ -117,7 +118,7 @@ public class EvaluationController {
     /**
      * 新增评价记录
      */
-    @DataOnChain
+    //@DataOnChain
     @PostMapping
     public Result<Boolean> save(@RequestBody Evaluation evaluation) {
         // 设置提交时间为当前时间
