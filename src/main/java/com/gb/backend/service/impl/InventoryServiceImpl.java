@@ -38,7 +38,7 @@ public class InventoryServiceImpl extends ServiceImpl<InventoryMapper, Inventory
     @Override
     public Inventory findByBatchNumber(String batchNumber) {
         return getOne(new LambdaQueryWrapper<Inventory>()
-                .eq(Inventory::getBatchNumber, batchNumber));
+                .eq(Inventory::getBatchNumber, batchNumber),false);
     }
     
     @Override
